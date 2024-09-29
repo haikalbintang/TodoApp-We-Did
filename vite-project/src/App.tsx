@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   navLinks,
   pastDataSeed,
@@ -7,6 +7,7 @@ import {
 } from "./data/dummyData";
 import { Item, ListProps } from "./types";
 import { ImCross } from "react-icons/im";
+import { getTodos } from "./services/apiTodos";
 
 function Navbar({ children, selectedNavLink, setSelectedNavLink }) {
   return (
@@ -24,7 +25,7 @@ function Navbar({ children, selectedNavLink, setSelectedNavLink }) {
         </div>
         <ul className="flex gap-11 w-1/3 items-center justify-center">
           {navLinks.map((navLink) => (
-            <li>
+            <li key={navLink.name}>
               <button
                 className={`text-xl
                   ${selectedNavLink === navLink.name ? "text-teal-500" : ""}
@@ -82,16 +83,21 @@ function TodoItem({ data, index }) {
     <li
       key={index}
       className={`${
-        descIsShown ? "bg-emerald-200" : ""
-      } py-1 hover:bg-emerald-200 px-2 my-2 hover:cursor-pointer`}
+        descIsShown ? "bg-sky-200" : ""
+      } py-1 hover:bg-sky-200 px-2 my-2 hover:cursor-pointer ${
+        data.status === "done" ? "text-zinc-500" : ""
+      }`}
     >
       <div
         className="flex items-center justify-between"
         onClick={handleToggleDesc}
       >
-        <p className="border-zinc-700 font-medium">
-          {index + 1}. {data.title}
-        </p>
+        <div>
+          <h2 className="border-zinc-700 font-semibold">
+            {index + 1}. {data.title}
+          </h2>
+          <h3>{data.subtitle}</h3>
+        </div>
         <div className="flex gap-2">
           <button className="h-4 w-4 rounded-full bg-emerald-300 border-2 border-zinc-700 hover:border-orange-300 hover:cursor-pointer"></button>
           <button className="h-4 w-4 rounded-full bg-yellow-300 border-2 border-zinc-700 hover:border-orange-300 hover:cursor-pointer"></button>
@@ -99,16 +105,17 @@ function TodoItem({ data, index }) {
         </div>
       </div>
       {descIsShown && (
-        <div className="relative">
-          <div className="hover:cursor-default">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo
-            voluptate eveniet eius pariatur repellendus ducimus nulla magni
-            incidunt fugit? Unde pariatur quisquam voluptas, repellat recusandae
-            ad impedit! Error maxime, fuga laborum nisi animi officiis dolorum?
-          </div>
+        <div className="relative pl-5 hover:cursor-default overflow-x-clip">
+          <ul>
+            {data.descriptions?.map((description: string, index: string) => (
+              <li className="list-disc mt-1 text-sm" key={index}>
+                {description}
+              </li>
+            ))}
+          </ul>
           <div
             onClick={() => setDescIsShown(false)}
-            className="absolute text-xs -right-0.5 bottom-0.5 w-4 h-4 rounded-full text-red-800"
+            className="absolute text-xs -right-0.5 bottom-0.5 w-4 h-4 rounded-full text-red-800 cursor-pointer"
           >
             <ImCross />
           </div>
@@ -123,12 +130,16 @@ function App() {
   const [currentTodo, setCurrentTodo] = useState("");
   const [pastData, setPastData] = useState(pastDataSeed);
 
+  useEffect(() => {
+    getTodos().then((data) => console.log(data));
+  });
+
   function handleAddPast(e: React.FormEvent) {
     e.preventDefault();
     const new_item: Item = {
       title: currentTodo,
       subtitle: "",
-      description: "",
+      descriptions: [],
       status: "",
     };
 
@@ -145,15 +156,15 @@ function App() {
           Profile
         </button>
       </Navbar>
-      <main className="min-h-screen flex justify-center px-20 pt-10 pb-0 gap-14">
+      <main className="h-fit flex justify-center px-20 pt-10 pb-0 gap-14">
         <div
-          className="w-1/3 bg-emerald-300 p-5 rounded-2xl"
+          className="w-1/3 bg-sky-300 p-5 rounded-2xl"
           onClick={() => setSelectedNavLink("past")}
         >
           {selectedNavLink === "past" ? (
             <>
               <List
-                title="Past"
+                title="Main"
                 data={pastData}
                 onChange={(e) => setCurrentTodo(e.target.value)}
                 inputValue={currentTodo}

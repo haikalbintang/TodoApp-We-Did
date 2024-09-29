@@ -1,7 +1,7 @@
 export interface Item {
   title: string;
   subtitle: string;
-  description: string;
+  descriptions: string[];
   status: string;
 }
 
