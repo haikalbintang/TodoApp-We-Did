@@ -2,47 +2,22 @@ import { useEffect, useState } from "react";
 import { getTodos } from "./services/apiTodos";
 import Navbar from "./components/Navbar";
 import List from "./components/List";
-import { mainDataSeed } from "./data/dummyData";
-import { Item } from "./types";
 import Form from "./components/Form";
 import { FaFeather } from "react-icons/fa6";
+import { Item } from "./types";
 
 function App() {
   const [selectedNavLink, setSelectedNavLink] = useState("present");
-  const [mainData, setMainData] = useState(mainDataSeed);
+  const [mainData, setMainData] = useState<Item[]>([]);
   // const [futureData, setFutureData] = useState(futureDataSeed);
-  const [currentTodoItem, setCurrentTodoItem] = useState("");
   const [formIsShown, setFormIsShown] = useState(false);
 
   useEffect(() => {
-    getTodos().then((data) => console.log(data));
-  });
-
-  function handleAddItem(e: React.FormEvent) {
-    e.preventDefault();
-    const new_item: Item = {
-      title: currentTodoItem,
-      subtitle: "",
-      descriptions: [],
-      status: "",
-    };
-
-    setMainData([...mainData, new_item]);
-    setCurrentTodoItem("");
-  }
-
-  // function handleAddFutureItem(e: React.FormEvent) {
-  //   e.preventDefault();
-  //   const new_item: Item = {
-  //     title: currentTodoItem,
-  //     subtitle: "",
-  //     descriptions: [],
-  //     status: "",
-  //   };
-
-  //   setFutureData([...futureData, new_item]);
-  //   setCurrentTodoItem("");
-  // }
+    getTodos().then((data) => {
+      setMainData(data);
+      console.log(data);
+    });
+  }, []);
 
   return (
     <div className="relative min-h-screen">
@@ -61,8 +36,6 @@ function App() {
               title={"Main"}
               onClick={() => setSelectedNavLink("present")}
               data={mainData}
-              onAddItem={handleAddItem}
-              currentTodoItem={currentTodoItem}
             />
           ) : null}
           {/* {selectedNavLink === "future" ? (
@@ -82,14 +55,7 @@ function App() {
           <FaFeather className="text-4xl" />
         </div>
       </div>
-      {formIsShown && (
-        <Form
-          inputValue={currentTodoItem}
-          onChange={(e) => setCurrentTodoItem(e.target.value)}
-          onAddItem={handleAddItem}
-          onClose={() => setFormIsShown(false)}
-        />
-      )}
+      {formIsShown && <Form onClose={() => setFormIsShown(false)} />}
     </div>
   );
 }

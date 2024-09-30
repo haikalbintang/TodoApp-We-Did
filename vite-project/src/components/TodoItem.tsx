@@ -22,17 +22,14 @@ export default function TodoItem({ data, index }: TodoItemProps) {
         data.status === "done" ? "text-zinc-500" : ""
       }`}
     >
-      <div
-        className="flex items-center justify-between"
-        onClick={handleToggleDesc}
-      >
+      <div className="flex justify-between" onClick={handleToggleDesc}>
         <div>
           <h2 className="border-zinc-700 font-semibold">
             {index + 1}. {data.title}
           </h2>
           <h3>{data.subtitle}</h3>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 items-start">
           <button className="h-4 w-4 rounded-full bg-emerald-300 border-2 border-zinc-700 hover:border-orange-300 hover:cursor-pointer"></button>
           <button className="h-4 w-4 rounded-full bg-yellow-300 border-2 border-zinc-700 hover:border-orange-300 hover:cursor-pointer"></button>
           <button className="h-4 w-4 rounded-full bg-orange-400 border-2 border-zinc-700 hover:border-orange-300 hover:cursor-pointer"></button>

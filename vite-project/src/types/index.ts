@@ -3,4 +3,6 @@ export interface Item {
   subtitle: string;
   descriptions: string[];
   status: string;
+  priority: string;
+  time: number
 }
