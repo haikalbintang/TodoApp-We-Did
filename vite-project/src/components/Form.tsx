@@ -1,15 +1,16 @@
 import Overlay from "./Overlay";
 import Header2 from "./Header2";
-import { useState } from "react";
-import { CreateItem } from "../types";
+import { useEffect, useState } from "react";
+import { CreateItem, GetItem } from "../types";
 import InputText from "./InputText";
 
 interface FormProps {
   onClose: () => void;
   onSubmit: (newTodo: CreateItem) => void;
+  initialData: GetItem|null
 }
 
-const Form = ({ onClose, onSubmit }: FormProps) => {
+const Form = ({ onClose, onSubmit, initialData }: FormProps) => {
   const [currentTodoItem, setCurrentTodoItem] = useState<CreateItem>({
     title: "",
     subtitle: "",
@@ -18,6 +19,12 @@ const Form = ({ onClose, onSubmit }: FormProps) => {
     priority: "high",
     time: 2,
   });
+
+  useEffect(() => {
+    if (initialData) {
+        setCurrentTodoItem(initialData)
+    }
+  }, [initialData])
 
   function addDescription() {
     setCurrentTodoItem((prev) => ({

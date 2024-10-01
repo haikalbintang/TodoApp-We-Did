@@ -1,4 +1,4 @@
-import { CreateItem } from "../types";
+import { CreateItem, GetItem } from "../types";
 import supabase from "./supabase";
 
 export async function getTodos() {
@@ -33,22 +33,20 @@ export async function deleteTodo(id: number) {
   console.log(response);
 }
 
-export async function updateTodo(id: number) {
+export async function updateTodo(
+  id: number,
+  updatedTodo: CreateItem
+): Promise<GetItem> {
   const { data, error } = await supabase
     .from("todos")
-    .update({
-      address: {
-        street: "Melrose Place",
-        postcode: 90210,
-      },
-    })
+    .update(updatedTodo)
     .eq("id", id)
     .select();
 
   if (error) {
     console.error(error);
-    throw new Error("Todo items could not be loaded");
+    throw new Error("Todo item could not be updated");
   }
 
-  return data;
+  return data[0];
 }

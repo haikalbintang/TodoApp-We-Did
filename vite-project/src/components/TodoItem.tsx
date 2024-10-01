@@ -4,14 +4,19 @@ import { ImCross } from "react-icons/im";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { FaPencil } from "react-icons/fa6";
 
-
 interface TodoItemProps {
   data: GetItem;
   index: number;
-  onDeleteTodo: (id: number) => void
+  onDeleteTodo: (id: number) => void;
+  onEditTodo: (data: GetItem) => void;
 }
 
-export default function TodoItem({ data, index, onDeleteTodo }: TodoItemProps) {
+export default function TodoItem({
+  data,
+  index,
+  onDeleteTodo,
+  onEditTodo,
+}: TodoItemProps) {
   const [descIsShown, setDescIsShown] = useState(false);
 
   function handleToggleDesc() {
@@ -19,7 +24,11 @@ export default function TodoItem({ data, index, onDeleteTodo }: TodoItemProps) {
   }
 
   function handleDelete() {
-    onDeleteTodo(data.id)
+    onDeleteTodo(data.id);
+  }
+
+  function handleEdit() {
+    onEditTodo(data);
   }
   return (
     <li
@@ -69,6 +78,7 @@ export default function TodoItem({ data, index, onDeleteTodo }: TodoItemProps) {
           <div
             title="edit"
             className="absolute text-sm right-10 bottom-0.5 w-4 h-4 rounded-full text-zinc-950 cursor-pointer"
+            onClick={handleEdit}
           >
             <FaPencil />
           </div>

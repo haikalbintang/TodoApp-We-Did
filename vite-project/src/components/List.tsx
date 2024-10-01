@@ -7,9 +7,10 @@ export interface ListProps {
   title: string;
   onClick: () => void;
   onDeleteTodo: (id: number) => void;
+  onEditTodo: (todo: GetItem) => void
 }
 
-const List = ({ data, title, onClick, onDeleteTodo }: ListProps) => {
+const List = ({ data, title, onClick, onDeleteTodo, onEditTodo }: ListProps) => {
   return (
     <Paper onClick={onClick} title={title}>
       <ol>
@@ -19,6 +20,7 @@ const List = ({ data, title, onClick, onDeleteTodo }: ListProps) => {
             data={data}
             index={index}
             onDeleteTodo={onDeleteTodo}
+            onEditTodo={onEditTodo}
           />
         ))}
       </ol>
