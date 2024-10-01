@@ -5,11 +5,12 @@ interface PaperProps {
   onClick: () => void;
   title: string;
   children: ReactNode;
+  bgColor: string;
 }
 
-const Paper = ({ onClick, title, children }: PaperProps) => {
+const Paper = ({ onClick, title, children, bgColor }: PaperProps) => {
   return (
-    <div className="w-1/3 bg-sky-300 p-5 rounded-2xl" onClick={onClick}>
+    <div className={`w-1/3 ${bgColor} p-5 rounded-2xl`} onClick={onClick}>
       <Header2 title={title} />
       {children}
     </div>

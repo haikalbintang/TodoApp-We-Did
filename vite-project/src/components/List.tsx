@@ -7,12 +7,28 @@ export interface ListProps {
   title: string;
   onClick: () => void;
   onDeleteTodo: (id: number) => void;
-  onEditTodo: (todo: GetItem) => void
+  onEditTodo: (todo: GetItem) => void;
+  bgColor: string;
+  selectedBgColor: string;
+  onPastClick: (id: number) => Promise<void>;
+  onPresentClick: (id: number) => Promise<void>;
+  onFutureClick: (id: number) => Promise<void>;
 }
 
-const List = ({ data, title, onClick, onDeleteTodo, onEditTodo }: ListProps) => {
+const List = ({
+  data,
+  title,
+  onClick,
+  onDeleteTodo,
+  onEditTodo,
+  bgColor,
+  selectedBgColor,
+  onPastClick,
+  onPresentClick,
+  onFutureClick,
+}: ListProps) => {
   return (
-    <Paper onClick={onClick} title={title}>
+    <Paper onClick={onClick} title={title} bgColor={bgColor}>
       <ol>
         {data.map((data, index) => (
           <TodoItem
@@ -21,6 +37,10 @@ const List = ({ data, title, onClick, onDeleteTodo, onEditTodo }: ListProps) => 
             index={index}
             onDeleteTodo={onDeleteTodo}
             onEditTodo={onEditTodo}
+            selectedBgColor={selectedBgColor}
+            onPastClick={onPastClick}
+            onPresentClick={onPresentClick}
+            onFutureClick={onFutureClick}
           />
         ))}
       </ol>

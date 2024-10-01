@@ -2,8 +2,13 @@ import { useEffect, useState } from "react";
 import {
   createTodo,
   deleteTodo,
-  getTodos,
+  getFutureTodos,
+  getPastTodos,
+  getPresentTodos,
   updateTodo,
+  updateTodoToFuture,
+  updateTodoToPast,
+  updateTodoToPresent,
 } from "./services/apiTodos";
 import Navbar from "./components/Navbar";
 import List from "./components/List";
@@ -13,8 +18,9 @@ import { GetItem, CreateItem } from "./types";
 
 function App() {
   const [selectedNavLink, setSelectedNavLink] = useState("present");
+  const [pastData, setPastData] = useState<GetItem[]>([]);
   const [mainData, setMainData] = useState<GetItem[]>([]);
-  // const [futureData, setFutureData] = useState(futureDataSeed);
+  const [futureData, setFutureData] = useState<GetItem[]>([]);
   const [formIsShown, setFormIsShown] = useState(false);
   const [todoToEdit, setTodoToEdit] = useState<GetItem | null>(null);
 
@@ -23,8 +29,12 @@ function App() {
   }, []);
 
   async function fetchTodos() {
-    const data = await getTodos();
-    setMainData(data);
+    const pastData = await getPastTodos();
+    const mainData = await getPresentTodos();
+    const futureData = await getFutureTodos();
+    setPastData(pastData);
+    setMainData(mainData);
+    setFutureData(futureData);
   }
 
   async function handleAddTodo(newTodo: CreateItem) {
@@ -47,7 +57,9 @@ function App() {
     try {
       await deleteTodo(id);
 
+      setPastData((prevData) => prevData.filter((todo) => todo.id !== id));
       setMainData((prevData) => prevData.filter((todo) => todo.id !== id));
+      setFutureData((prevData) => prevData.filter((todo) => todo.id !== id));
     } catch (error) {
       console.error("Failed to delete todo:", error);
     }
@@ -56,6 +68,66 @@ function App() {
   function handleEditTodo(todo: GetItem) {
     setTodoToEdit(todo);
     setFormIsShown(true);
+  }
+
+  async function handleToPast(id: number) {
+    try {
+      await updateTodoToPast(id);
+
+      const updatedTodo =
+        mainData.find((todo) => todo.id === id) ||
+        futureData.find((todo) => todo.id === id);
+
+      if (!updatedTodo) {
+        throw new Error("Todo item not found");
+      }
+
+      setMainData((prevData) => prevData.filter((todo) => todo.id !== id));
+      setFutureData((prevData) => prevData.filter((todo) => todo.id !== id));
+      setPastData((prevData) => [...prevData, updatedTodo]);
+    } catch (error) {
+      console.error("Failed to move todo", error);
+    }
+  }
+
+  async function handleToPresent(id: number) {
+    try {
+      await updateTodoToPresent(id);
+
+      const updatedTodo =
+        pastData.find((todo) => todo.id === id) ||
+        futureData.find((todo) => todo.id === id);
+
+      if (!updatedTodo) {
+        throw new Error("Todo item not found");
+      }
+
+      setPastData((prevData) => prevData.filter((todo) => todo.id !== id));
+      setFutureData((prevData) => prevData.filter((todo) => todo.id !== id));
+      setMainData((prevData) => [...prevData, updatedTodo]);
+    } catch (error) {
+      console.error("Failed to move todo", error);
+    }
+  }
+
+  async function handleToFuture(id: number) {
+    try {
+      await updateTodoToFuture(id);
+
+      const updatedTodo =
+        pastData.find((todo) => todo.id === id) ||
+        mainData.find((todo) => todo.id === id);
+
+      if (!updatedTodo) {
+        throw new Error("Todo item not found");
+      }
+
+      setPastData((prevData) => prevData.filter((todo) => todo.id !== id));
+      setMainData((prevData) => prevData.filter((todo) => todo.id !== id));
+      setFutureData((prevData) => [...prevData, updatedTodo]);
+    } catch (error) {
+      console.error("Failed to move todo", error);
+    }
   }
 
   return (
@@ -70,22 +142,46 @@ function App() {
       </Navbar>
       <div className="mx-auto max-w-[1366px]">
         <main className="h-fit flex justify-center pt-10 pb-0 gap-4">
+          {selectedNavLink === "past" ? (
+            <List
+              title={"Past"}
+              onClick={() => setSelectedNavLink("past")}
+              data={pastData}
+              bgColor="bg-emerald-300"
+              selectedBgColor="bg-emerald-200"
+              onDeleteTodo={handleDeleteTodo}
+              onEditTodo={handleEditTodo}
+              onPastClick={handleToPast}
+              onPresentClick={handleToPresent}
+              onFutureClick={handleToFuture}
+            />
+          ) : null}
           {selectedNavLink === "present" ? (
             <List
               title={"Main"}
               onClick={() => setSelectedNavLink("present")}
               data={mainData}
+              bgColor="bg-sky-300"
+              selectedBgColor="bg-sky-200"
               onDeleteTodo={handleDeleteTodo}
               onEditTodo={handleEditTodo}
+              onPastClick={handleToPast}
+              onPresentClick={handleToPresent}
+              onFutureClick={handleToFuture}
             />
           ) : null}
           {selectedNavLink === "future" ? (
             <List
               title={"Future"}
               onClick={() => setSelectedNavLink("future")}
-              data={mainData}
+              data={futureData}
+              bgColor="bg-orange-300"
+              selectedBgColor="bg-orange-200"
               onDeleteTodo={handleDeleteTodo}
               onEditTodo={handleEditTodo}
+              onPastClick={handleToPast}
+              onPresentClick={handleToPresent}
+              onFutureClick={handleToFuture}
             />
           ) : null}
         </main>

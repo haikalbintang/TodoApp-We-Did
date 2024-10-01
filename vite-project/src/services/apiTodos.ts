@@ -1,12 +1,43 @@
 import { CreateItem, GetItem } from "../types";
 import supabase from "./supabase";
 
-export async function getTodos() {
-  const { data, error } = await supabase.from("todos").select("*");
+export async function getPastTodos() {
+  const { data, error } = await supabase
+    .from("todos")
+    .select("*")
+    .eq("time", 1);
 
   if (error) {
     console.error(error);
-    throw new Error("Todo items could not be loaded");
+    throw new Error("Past todo items could not be loaded");
+  }
+
+  return data;
+}
+
+export async function getPresentTodos() {
+  const { data, error } = await supabase
+    .from("todos")
+    .select("*")
+    .eq("time", 2);
+
+  if (error) {
+    console.error(error);
+    throw new Error("Present todo items could not be loaded");
+  }
+
+  return data;
+}
+
+export async function getFutureTodos() {
+  const { data, error } = await supabase
+    .from("todos")
+    .select("*")
+    .eq("time", 3);
+
+  if (error) {
+    console.error(error);
+    throw new Error("Future todo items could not be loaded");
   }
 
   return data;
@@ -40,6 +71,51 @@ export async function updateTodo(
   const { data, error } = await supabase
     .from("todos")
     .update(updatedTodo)
+    .eq("id", id)
+    .select();
+
+  if (error) {
+    console.error(error);
+    throw new Error("Todo item could not be updated");
+  }
+
+  return data[0];
+}
+
+export async function updateTodoToPast(id: number): Promise<GetItem> {
+  const { data, error } = await supabase
+    .from("todos")
+    .update({ time: 1 })
+    .eq("id", id)
+    .select();
+
+  if (error) {
+    console.error(error);
+    throw new Error("Todo item could not be updated");
+  }
+
+  return data[0];
+}
+
+export async function updateTodoToPresent(id: number): Promise<GetItem> {
+  const { data, error } = await supabase
+    .from("todos")
+    .update({ time: 2 })
+    .eq("id", id)
+    .select();
+
+  if (error) {
+    console.error(error);
+    throw new Error("Todo item could not be updated");
+  }
+
+  return data[0];
+}
+
+export async function updateTodoToFuture(id: number): Promise<GetItem> {
+  const { data, error } = await supabase
+    .from("todos")
+    .update({ time: 3 })
     .eq("id", id)
     .select();
 
