@@ -1,23 +1,40 @@
 import { useEffect, useState } from "react";
-import { getTodos } from "./services/apiTodos";
+import { createTodo, deleteTodo, getTodos } from "./services/apiTodos";
 import Navbar from "./components/Navbar";
 import List from "./components/List";
 import Form from "./components/Form";
 import { FaFeather } from "react-icons/fa6";
-import { Item } from "./types";
+import { GetItem, CreateItem } from "./types";
 
 function App() {
   const [selectedNavLink, setSelectedNavLink] = useState("present");
-  const [mainData, setMainData] = useState<Item[]>([]);
+  const [mainData, setMainData] = useState<GetItem[]>([]);
   // const [futureData, setFutureData] = useState(futureDataSeed);
   const [formIsShown, setFormIsShown] = useState(false);
 
   useEffect(() => {
-    getTodos().then((data) => {
-      setMainData(data);
-      console.log(data);
-    });
+    fetchTodos();
   }, []);
+
+  async function fetchTodos() {
+    const data = await getTodos();
+    setMainData(data);
+  }
+
+  async function handleAddTodo(newTodo: CreateItem) {
+    const createdTodo = await createTodo(newTodo);
+    setMainData((prevData) => [...prevData, createdTodo[0]]);
+  }
+
+  async function handleDeleteTodo(id: number) {
+    try {
+      await deleteTodo(id);
+
+      setMainData((prevData) => prevData.filter((todo) => todo.id !== id));
+    } catch (error) {
+      console.error("Failed to delete todo:", error);
+    }
+  }
 
   return (
     <div className="relative min-h-screen">
@@ -36,6 +53,7 @@ function App() {
               title={"Main"}
               onClick={() => setSelectedNavLink("present")}
               data={mainData}
+              onDeleteTodo={handleDeleteTodo}
             />
           ) : null}
           {/* {selectedNavLink === "future" ? (
@@ -55,7 +73,9 @@ function App() {
           <FaFeather className="text-4xl" />
         </div>
       </div>
-      {formIsShown && <Form onClose={() => setFormIsShown(false)} />}
+      {formIsShown && (
+        <Form onClose={() => setFormIsShown(false)} onSubmit={handleAddTodo} />
+      )}
     </div>
   );
 }

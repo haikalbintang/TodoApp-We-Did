@@ -1,16 +1,16 @@
 import Overlay from "./Overlay";
 import Header2 from "./Header2";
 import { useState } from "react";
-import { Item } from "../types";
+import { CreateItem } from "../types";
 import InputText from "./InputText";
-import { createTodo } from "../services/apiTodos";
 
 interface FormProps {
   onClose: () => void;
+  onSubmit: (newTodo: CreateItem) => void;
 }
 
-const Form = ({ onClose }: FormProps) => {
-  const [currentTodoItem, setCurrentTodoItem] = useState<Item>({
+const Form = ({ onClose, onSubmit }: FormProps) => {
+  const [currentTodoItem, setCurrentTodoItem] = useState<CreateItem>({
     title: "",
     subtitle: "",
     descriptions: [""],
@@ -37,9 +37,10 @@ const Form = ({ onClose }: FormProps) => {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const newItem: Item = currentTodoItem;
+    const newItem: CreateItem = currentTodoItem;
     console.log(newItem);
-    createTodo(newItem);
+
+    onSubmit(newItem);
 
     setCurrentTodoItem({
       title: "",
@@ -50,14 +51,14 @@ const Form = ({ onClose }: FormProps) => {
       time: 2,
     });
     onClose();
-    window.location.reload();
+    // window.location.reload();
   }
 
   return (
     <Overlay onClose={onClose}>
       <div
         onClick={(e) => e.stopPropagation()}
-        className="p-20 fixed flex flex-col top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl z-50"
+        className="py-10 px-10 fixed flex flex-col top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl z-50"
       >
         <div className="min-w-96">
           <Header2 title="New To-do" />
@@ -99,7 +100,7 @@ const Form = ({ onClose }: FormProps) => {
               <button
                 type="button"
                 onClick={addDescription}
-                className="hover:cursor-pointer flex max-w-[134px] gap-6 items-center justify-between px-2 py-2 my-3 bg-sky-200 hover:bg-sky-300 rounded-lg"
+                className="hover:cursor-pointer text-zinc-700 hover:text-zinc-800 flex max-w-[134px] gap-6 items-center justify-between px-2 py-2 my-3 bg-sky-200 hover:bg-sky-300 rounded-lg"
               >
                 <p className="font-semibold">Add Description</p>
               </button>

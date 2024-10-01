@@ -1,17 +1,25 @@
 import { useState } from "react";
-import { Item } from "../types";
+import { GetItem } from "../types";
 import { ImCross } from "react-icons/im";
+import { FaRegTrashAlt } from "react-icons/fa";
+import { FaPencil } from "react-icons/fa6";
+
 
 interface TodoItemProps {
-  data: Item;
+  data: GetItem;
   index: number;
+  onDeleteTodo: (id: number) => void
 }
 
-export default function TodoItem({ data, index }: TodoItemProps) {
+export default function TodoItem({ data, index, onDeleteTodo }: TodoItemProps) {
   const [descIsShown, setDescIsShown] = useState(false);
 
   function handleToggleDesc() {
     setDescIsShown((prev) => !prev);
+  }
+
+  function handleDelete() {
+    onDeleteTodo(data.id)
   }
   return (
     <li
@@ -45,10 +53,24 @@ export default function TodoItem({ data, index }: TodoItemProps) {
             ))}
           </ul>
           <div
+            title="close"
             onClick={() => setDescIsShown(false)}
-            className="absolute text-xs -right-0.5 bottom-0.5 w-4 h-4 rounded-full text-red-800 cursor-pointer"
+            className="absolute text-sm -right-0.5 bottom-0.5 w-4 h-4 rounded-full text-red-800 cursor-pointer"
           >
             <ImCross />
+          </div>
+          <div
+            title="delete"
+            className="absolute text-sm right-5 bottom-0.5 w-4 h-4 rounded-full text-zinc-950 cursor-pointer"
+            onClick={handleDelete}
+          >
+            <FaRegTrashAlt />
+          </div>
+          <div
+            title="edit"
+            className="absolute text-sm right-10 bottom-0.5 w-4 h-4 rounded-full text-zinc-950 cursor-pointer"
+          >
+            <FaPencil />
           </div>
         </div>
       )}

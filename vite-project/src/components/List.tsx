@@ -1,19 +1,25 @@
-import { Item } from "../types";
+import { GetItem } from "../types";
 import TodoItem from "./TodoItem";
 import Paper from "./Paper";
 
 export interface ListProps {
-  data: Item[];
+  data: GetItem[];
   title: string;
   onClick: () => void;
+  onDeleteTodo: (id: number) => void;
 }
 
-const List = ({ data, title, onClick }: ListProps) => {
+const List = ({ data, title, onClick, onDeleteTodo }: ListProps) => {
   return (
     <Paper onClick={onClick} title={title}>
       <ol>
         {data.map((data, index) => (
-          <TodoItem key={data.title} data={data} index={index} />
+          <TodoItem
+            key={data.title}
+            data={data}
+            index={index}
+            onDeleteTodo={onDeleteTodo}
+          />
         ))}
       </ol>
     </Paper>
