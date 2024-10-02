@@ -23,7 +23,7 @@ export default function TodoItem({
   selectedBgColor,
   onPastClick,
   onPresentClick,
-  onFutureClick
+  onFutureClick,
 }: TodoItemProps) {
   const [descIsShown, setDescIsShown] = useState(false);
 
@@ -54,14 +54,12 @@ export default function TodoItem({
     onFutureClick(data.id);
   }
 
-
-
   return (
     <li
       key={index}
       className={`${
         descIsShown ? selectedBgColor : ""
-      } py-1 hover:${selectedBgColor} px-2 my-2 hover:cursor-pointer ${
+      } py-1 border-b border-zinc-700 hover:${selectedBgColor} px-2 my-2 hover:cursor-pointer ${
         data.status === "done" ? "text-zinc-500" : ""
       }`}
     >
@@ -70,25 +68,33 @@ export default function TodoItem({
           <h2 className="border-zinc-700 font-semibold">
             {index + 1}. {data.title}
           </h2>
-          <h3>{data.subtitle}</h3>
+          <h3 className="text-sm">{data.subtitle}</h3>
         </div>
         <div className="flex gap-2 items-start mt-1">
           <button
             onClick={handleToPast}
             className="h-4 w-4 rounded-full bg-emerald-300 border-2 border-zinc-700 hover:border-orange-300 hover:cursor-pointer"
           ></button>
-          <button onClick={handleToPresent} className="h-4 w-4 rounded-full bg-yellow-300 border-2 border-zinc-700 hover:border-orange-300 hover:cursor-pointer"></button>
-          <button onClick={handleToFuture} className="h-4 w-4 rounded-full bg-orange-400 border-2 border-zinc-700 hover:border-orange-300 hover:cursor-pointer"></button>
+          <button
+            onClick={handleToPresent}
+            className="h-4 w-4 rounded-full bg-sky-300 border-2 border-zinc-700 hover:border-orange-300 hover:cursor-pointer"
+          ></button>
+          <button
+            onClick={handleToFuture}
+            className="h-4 w-4 rounded-full bg-orange-300 border-2 border-zinc-700 hover:border-orange-300 hover:cursor-pointer"
+          ></button>
         </div>
       </div>
       {descIsShown && (
         <div className="relative pl-5 hover:cursor-default overflow-x-clip">
           <ul>
-            {data.descriptions?.map((description: string, index: number) => (
-              <li className="list-disc mt-1 text-sm" key={index}>
-                {description}
-              </li>
-            ))}
+            {data.descriptions?.map((description: string, index: number) =>
+              description !== "" ? (
+                <li className="list-disc mt-1 text-sm" key={index}>
+                  {description}
+                </li>
+              ) : null
+            )}
           </ul>
           <div
             title="close"

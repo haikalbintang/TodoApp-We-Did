@@ -7,7 +7,7 @@ import InputText from "./InputText";
 interface FormProps {
   onClose: () => void;
   onSubmit: (newTodo: CreateItem) => void;
-  initialData: GetItem|null
+  initialData: GetItem | null;
 }
 
 const Form = ({ onClose, onSubmit, initialData }: FormProps) => {
@@ -22,9 +22,9 @@ const Form = ({ onClose, onSubmit, initialData }: FormProps) => {
 
   useEffect(() => {
     if (initialData) {
-        setCurrentTodoItem(initialData)
+      setCurrentTodoItem(initialData);
     }
-  }, [initialData])
+  }, [initialData]);
 
   function addDescription() {
     setCurrentTodoItem((prev) => ({
@@ -104,13 +104,15 @@ const Form = ({ onClose, onSubmit, initialData }: FormProps) => {
                   }
                 />
               ))}
-              <button
-                type="button"
-                onClick={addDescription}
-                className="hover:cursor-pointer text-zinc-700 hover:text-zinc-800 flex max-w-[134px] gap-6 items-center justify-between px-2 py-2 my-3 bg-sky-200 hover:bg-sky-300 rounded-lg"
-              >
-                <p className="font-semibold">Add Description</p>
-              </button>
+              <div>
+                <button
+                  type="button"
+                  onClick={addDescription}
+                  className="hover:cursor-pointer text-zinc-700 hover:text-zinc-800 flex max-w-[134px] gap-6 items-center justify-between px-2 py-2 my-3 bg-sky-200 hover:bg-sky-300 rounded-lg"
+                >
+                  <p className="font-semibold">Add Description</p>
+                </button>
+              </div>
             </div>
 
             <div className="flex items-center justify-end">

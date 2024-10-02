@@ -16,11 +16,11 @@ export default function Navbar({
     <div className="w-full shadow-xl">
       <nav className="mx-auto h-20 max-w-[1366px] flex items-center justify-between">
         <div className="flex w-1/3">
-          <h1 className="pb-2 ml-4 text-5xl font-bold text-teal-600 flex items-center">
-            To-do App
+          <h1 className="pb-2 ml-4 text-4xl font-bold text-teal-600 flex items-center">
+            TodoApp
           </h1>
           <img
-            className="w-16 ml-1"
+            className="w-12 ml-1"
             src="/check-icon-big.png"
             alt="check icon"
           />

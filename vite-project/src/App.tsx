@@ -40,7 +40,17 @@ function App() {
   async function handleAddTodo(newTodo: CreateItem) {
     if (todoToEdit) {
       const updatedTodo = await updateTodo(todoToEdit.id, newTodo);
+      setPastData((prevData) =>
+        prevData.map((todo) =>
+          todo.id === updatedTodo.id ? updatedTodo : todo
+        )
+      );
       setMainData((prevData) =>
+        prevData.map((todo) =>
+          todo.id === updatedTodo.id ? updatedTodo : todo
+        )
+      );
+      setFutureData((prevData) =>
         prevData.map((todo) =>
           todo.id === updatedTodo.id ? updatedTodo : todo
         )
@@ -142,48 +152,44 @@ function App() {
       </Navbar>
       <div className="mx-auto max-w-[1366px]">
         <main className="h-fit flex justify-center pt-10 pb-0 gap-4">
-          {selectedNavLink === "past" ? (
-            <List
-              title={"Past"}
-              onClick={() => setSelectedNavLink("past")}
-              data={pastData}
-              bgColor="bg-emerald-300"
-              selectedBgColor="bg-emerald-200"
-              onDeleteTodo={handleDeleteTodo}
-              onEditTodo={handleEditTodo}
-              onPastClick={handleToPast}
-              onPresentClick={handleToPresent}
-              onFutureClick={handleToFuture}
-            />
-          ) : null}
-          {selectedNavLink === "present" ? (
-            <List
-              title={"Main"}
-              onClick={() => setSelectedNavLink("present")}
-              data={mainData}
-              bgColor="bg-sky-300"
-              selectedBgColor="bg-sky-200"
-              onDeleteTodo={handleDeleteTodo}
-              onEditTodo={handleEditTodo}
-              onPastClick={handleToPast}
-              onPresentClick={handleToPresent}
-              onFutureClick={handleToFuture}
-            />
-          ) : null}
-          {selectedNavLink === "future" ? (
-            <List
-              title={"Future"}
-              onClick={() => setSelectedNavLink("future")}
-              data={futureData}
-              bgColor="bg-orange-300"
-              selectedBgColor="bg-orange-200"
-              onDeleteTodo={handleDeleteTodo}
-              onEditTodo={handleEditTodo}
-              onPastClick={handleToPast}
-              onPresentClick={handleToPresent}
-              onFutureClick={handleToFuture}
-            />
-          ) : null}
+          <List
+            title={"Daily Habit"}
+            onClick={() => setSelectedNavLink("past")}
+            data={pastData}
+            bgColor="bg-emerald-300"
+            selectedBgColor="bg-emerald-200"
+            onDeleteTodo={handleDeleteTodo}
+            onEditTodo={handleEditTodo}
+            onPastClick={handleToPast}
+            onPresentClick={handleToPresent}
+            onFutureClick={handleToFuture}
+          />
+
+          <List
+            title={"Today"}
+            onClick={() => setSelectedNavLink("present")}
+            data={mainData}
+            bgColor="bg-sky-300"
+            selectedBgColor="bg-sky-200"
+            onDeleteTodo={handleDeleteTodo}
+            onEditTodo={handleEditTodo}
+            onPastClick={handleToPast}
+            onPresentClick={handleToPresent}
+            onFutureClick={handleToFuture}
+          />
+
+          <List
+            title={"Todo List"}
+            onClick={() => setSelectedNavLink("future")}
+            data={futureData}
+            bgColor="bg-orange-300"
+            selectedBgColor="bg-orange-200"
+            onDeleteTodo={handleDeleteTodo}
+            onEditTodo={handleEditTodo}
+            onPastClick={handleToPast}
+            onPresentClick={handleToPresent}
+            onFutureClick={handleToFuture}
+          />
         </main>
         <div
           onClick={() => {
