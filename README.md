@@ -2,17 +2,43 @@
 
 ## Prerequisites
 
-- Node.js
-- npm
+Ensure you have the following installed:
 
-## How to Run the Project
+- [Node.js](https://nodejs.org/) (v14 or higher recommended)
+- [npm](https://www.npmjs.com/)
 
-### 1. Clone Repository
+## Getting Started
 
-### 2. Navigate to vite-project
+Follow these steps to set up and run the project locally:
 
-### 3. Open the terminal and ensure you are in vite-project folder
+### 1. Clone the repository
 
-### 4. Run npm install
+\`\`\`bash
+git clone <repository-url>
+\`\`\`
 
-### 4. Run npm run dev
+### 2. Navigate to the project directory
+
+\`\`\`bash
+cd vite-project
+\`\`\`
+
+### 3. Install dependencies
+
+Ensure you're in the project folder, then run:
+
+\`\`\`bash
+npm install
+\`\`\`
+
+### 4. Run the development server
+
+Start the local development server with:
+
+\`\`\`bash
+npm run dev
+\`\`\`
+
+### 5. Access the app
+
+Open your browser and navigate to \`http://localhost:5173\`.
