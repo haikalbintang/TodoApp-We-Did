@@ -17,7 +17,7 @@ const InputText = ({ label, name, value, onChange }: InputTextProps) => {
         type="text"
         value={value}
         onChange={onChange}
-        className="ring border-2 border-zinc-800 py-0.5 px-2 rounded-md w-80 flex flex-wrap"
+        className="text-sm ring border-2 border-zinc-800 py-1 px-2 rounded-md w-80 flex flex-wrap"
       />
     </div>
   );

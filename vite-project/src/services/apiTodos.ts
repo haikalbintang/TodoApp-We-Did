@@ -126,3 +126,17 @@ export async function updateTodoToFuture(id: number): Promise<GetItem> {
 
   return data[0];
 }
+
+export async function updateItemPosition(id: number, newStatus: string) {
+  try {
+    if (newStatus === "past") {
+      await updateTodoToPast(id);
+    } else if (newStatus === "present") {
+      await updateTodoToPresent(id);
+    } else if (newStatus === "future") {
+      await updateTodoToFuture(id);
+    }
+  } catch (error) {
+    console.error("Failed to update item position:", error);
+  }
+}

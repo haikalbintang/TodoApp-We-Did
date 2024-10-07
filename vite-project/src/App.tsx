@@ -150,9 +150,10 @@ function App() {
           Profile
         </button>
       </Navbar>
-      <div className="mx-auto max-w-[1366px]">
+      <div className="mx-auto max-w-[1366px] px-4">
         <main className="h-fit flex justify-center pt-10 pb-0 gap-4">
           <List
+            key={0}
             title={"Daily Habit"}
             onClick={() => setSelectedNavLink("past")}
             data={pastData}
@@ -166,6 +167,7 @@ function App() {
           />
 
           <List
+            key={1}
             title={"Today"}
             onClick={() => setSelectedNavLink("present")}
             data={mainData}
@@ -179,6 +181,7 @@ function App() {
           />
 
           <List
+            key={2}
             title={"Todo List"}
             onClick={() => setSelectedNavLink("future")}
             data={futureData}
