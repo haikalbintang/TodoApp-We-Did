@@ -59,7 +59,7 @@ export default function TodoItem({
       key={index}
       className={`${
         descIsShown ? selectedBgColor : ""
-      } py-1 border-b border-zinc-700 hover:${selectedBgColor} px-2 my-2 hover:cursor-pointer ${
+      } py-3 border-b border-zinc-700 hover:${selectedBgColor} px-2 hover:cursor-pointer ${
         data.status === "done" ? "text-zinc-500" : ""
       }`}
     >

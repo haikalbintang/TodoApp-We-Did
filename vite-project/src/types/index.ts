@@ -17,3 +17,14 @@ export interface CreateItem {
   time: number
 }
 
+export interface LoginCredentials {
+  email: string,
+  password: string
+}
+
+export interface SignUpCredentials {
+  nickname: string
+  username: string,
+  email: string,
+  password: string
+}

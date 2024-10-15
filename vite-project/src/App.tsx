@@ -14,7 +14,15 @@ import Navbar from "./components/Navbar";
 import List from "./components/List";
 import Form from "./components/Form";
 import { FaFeather } from "react-icons/fa6";
-import { GetItem, CreateItem } from "./types";
+import {
+  GetItem,
+  CreateItem,
+  LoginCredentials,
+  SignUpCredentials,
+} from "./types";
+import Login from "./components/Login";
+import SignUp from "./components/SignUp";
+import { userSignUp } from "./services/apiUsers";
 
 function App() {
   const [selectedNavLink, setSelectedNavLink] = useState("present");
@@ -23,6 +31,8 @@ function App() {
   const [futureData, setFutureData] = useState<GetItem[]>([]);
   const [formIsShown, setFormIsShown] = useState(false);
   const [todoToEdit, setTodoToEdit] = useState<GetItem | null>(null);
+  const [signUpIsShown, setSignUpIsShown] = useState(false);
+  const [loginIsShown, setLoginIsShown] = useState(false);
 
   useEffect(() => {
     fetchTodos();
@@ -35,6 +45,17 @@ function App() {
     setPastData(pastData);
     setMainData(mainData);
     setFutureData(futureData);
+  }
+
+  function handleLogin(loginCredentials: LoginCredentials) {
+    console.log(loginCredentials);
+  }
+
+  async function handleSignUp(signUpCredentials: SignUpCredentials) {
+    await userSignUp(signUpCredentials);
+    console.log(signUpCredentials);
+
+    setSignUpIsShown(false);
   }
 
   async function handleAddTodo(newTodo: CreateItem) {
@@ -146,53 +167,64 @@ function App() {
         selectedNavLink={selectedNavLink}
         setSelectedNavLink={setSelectedNavLink}
       >
-        <button className="bg-fuchsia-900 text-fuchsia-200 py-2 px-6 text-lg rounded-full mx-10">
-          Profile
+        <button
+          onClick={() => setSignUpIsShown(true)}
+          className="bg-fuchsia-900 text-fuchsia-200 py-2 px-6 text-lg rounded-full"
+        >
+          Sign Up
+        </button>
+        <button
+          onClick={() => setLoginIsShown(true)}
+          className="bg-fuchsia-900 text-fuchsia-200 py-2 px-6 text-lg rounded-full mx-5"
+        >
+          Login
         </button>
       </Navbar>
       <div className="mx-auto max-w-[1366px] px-4">
         <main className="h-fit flex justify-center pt-10 pb-0 gap-4">
-          <List
-            key={0}
-            title={"Daily Habit"}
-            onClick={() => setSelectedNavLink("past")}
-            data={pastData}
-            bgColor="bg-emerald-300"
-            selectedBgColor="bg-emerald-200"
-            onDeleteTodo={handleDeleteTodo}
-            onEditTodo={handleEditTodo}
-            onPastClick={handleToPast}
-            onPresentClick={handleToPresent}
-            onFutureClick={handleToFuture}
-          />
+          <>
+            <List
+              key={0}
+              title={"Daily Habit"}
+              onClick={() => setSelectedNavLink("past")}
+              data={pastData}
+              bgColor="bg-emerald-300"
+              selectedBgColor="bg-emerald-200"
+              onDeleteTodo={handleDeleteTodo}
+              onEditTodo={handleEditTodo}
+              onPastClick={handleToPast}
+              onPresentClick={handleToPresent}
+              onFutureClick={handleToFuture}
+            />
 
-          <List
-            key={1}
-            title={"Today"}
-            onClick={() => setSelectedNavLink("present")}
-            data={mainData}
-            bgColor="bg-sky-300"
-            selectedBgColor="bg-sky-200"
-            onDeleteTodo={handleDeleteTodo}
-            onEditTodo={handleEditTodo}
-            onPastClick={handleToPast}
-            onPresentClick={handleToPresent}
-            onFutureClick={handleToFuture}
-          />
+            <List
+              key={1}
+              title={"Today"}
+              onClick={() => setSelectedNavLink("present")}
+              data={mainData}
+              bgColor="bg-sky-300"
+              selectedBgColor="bg-sky-200"
+              onDeleteTodo={handleDeleteTodo}
+              onEditTodo={handleEditTodo}
+              onPastClick={handleToPast}
+              onPresentClick={handleToPresent}
+              onFutureClick={handleToFuture}
+            />
 
-          <List
-            key={2}
-            title={"Todo List"}
-            onClick={() => setSelectedNavLink("future")}
-            data={futureData}
-            bgColor="bg-orange-300"
-            selectedBgColor="bg-orange-200"
-            onDeleteTodo={handleDeleteTodo}
-            onEditTodo={handleEditTodo}
-            onPastClick={handleToPast}
-            onPresentClick={handleToPresent}
-            onFutureClick={handleToFuture}
-          />
+            <List
+              key={2}
+              title={"Todo List"}
+              onClick={() => setSelectedNavLink("future")}
+              data={futureData}
+              bgColor="bg-orange-300"
+              selectedBgColor="bg-orange-200"
+              onDeleteTodo={handleDeleteTodo}
+              onEditTodo={handleEditTodo}
+              onPastClick={handleToPast}
+              onPresentClick={handleToPresent}
+              onFutureClick={handleToFuture}
+            />
+          </>
         </main>
         <div
           onClick={() => {
@@ -204,11 +236,21 @@ function App() {
           <FaFeather className="text-4xl" />
         </div>
       </div>
+
       {formIsShown && (
         <Form
           onClose={() => setFormIsShown(false)}
           onSubmit={handleAddTodo}
           initialData={todoToEdit}
+        />
+      )}
+      {loginIsShown && (
+        <Login onClose={() => setLoginIsShown(false)} onSubmit={handleLogin} />
+      )}
+      {signUpIsShown && (
+        <SignUp
+          onClose={() => setSignUpIsShown(false)}
+          onSubmit={handleSignUp}
         />
       )}
     </div>
