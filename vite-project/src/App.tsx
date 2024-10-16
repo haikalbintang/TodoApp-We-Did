@@ -23,6 +23,7 @@ import {
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
 import { userSignUp } from "./services/apiUsers";
+import Main from "./layouts/Main";
 
 function App() {
   const [selectedNavLink, setSelectedNavLink] = useState("present");
@@ -181,8 +182,8 @@ function App() {
         </button>
       </Navbar>
       <div className="mx-auto max-w-[1366px] px-4">
-        <main className="h-fit flex justify-center pt-10 pb-0 gap-4">
-          <>
+        <Main>
+          {selectedNavLink === "past" && (
             <List
               key={0}
               title={"Daily Habit"}
@@ -196,7 +197,9 @@ function App() {
               onPresentClick={handleToPresent}
               onFutureClick={handleToFuture}
             />
+          )}
 
+          {selectedNavLink === "present" && (
             <List
               key={1}
               title={"Today"}
@@ -210,7 +213,9 @@ function App() {
               onPresentClick={handleToPresent}
               onFutureClick={handleToFuture}
             />
+          )}
 
+          {selectedNavLink === "future" && (
             <List
               key={2}
               title={"Todo List"}
@@ -224,8 +229,8 @@ function App() {
               onPresentClick={handleToPresent}
               onFutureClick={handleToFuture}
             />
-          </>
-        </main>
+          )}
+        </Main>
         <div
           onClick={() => {
             setFormIsShown(true);
