@@ -1,4 +1,4 @@
-import Overlay from "./Overlay";
+import Overlay from "../layouts/Overlay";
 import { SignUpCredentials } from "../types";
 import Header2 from "./Header2";
 import InputText from "./InputText";

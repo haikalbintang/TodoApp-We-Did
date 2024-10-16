@@ -12,7 +12,7 @@ import {
 } from "./services/apiTodos";
 import Navbar from "./components/Navbar";
 import List from "./components/List";
-import Form from "./components/Form";
+import Form from "./components/AddItemForm";
 import { FaFeather } from "react-icons/fa6";
 import {
   GetItem,
@@ -24,7 +24,7 @@ import Login from "./components/Login";
 import SignUp from "./components/SignUp";
 import { userSignUp } from "./services/apiUsers";
 import Main from "./layouts/Main";
-import Paper from "./components/Paper";
+import Paper from "./layouts/Paper";
 import TodoItem from "./components/TodoItem";
 
 function App() {
@@ -165,7 +165,7 @@ function App() {
   }
 
   return (
-    <div className="relative min-h-screen">
+    <div className="relative min-h-screen no-sx">
       <Navbar
         selectedNavLink={selectedNavLink}
         setSelectedNavLink={setSelectedNavLink}
@@ -244,7 +244,7 @@ function App() {
             setFormIsShown(true);
             setTodoToEdit(null);
           }}
-          className="fixed cursor-pointer bg-sky-300 p-5 rounded-full right-36 bottom-10 shadow-zinc-400 shadow-lg"
+          className="fixed cursor-pointer animate-bounce bg-teal-500 p-5 rounded-full right-5 bottom-12 shadow-zinc-600 shadow-lg"
         >
           <FaFeather className="text-4xl" />
         </div>

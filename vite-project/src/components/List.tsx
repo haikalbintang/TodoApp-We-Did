@@ -1,6 +1,6 @@
 import { GetItem } from "../types";
 import TodoItem from "./TodoItem";
-import Paper from "./Paper";
+import Paper from "../layouts/Paper";
 
 export interface ListProps {
   data: GetItem[];
