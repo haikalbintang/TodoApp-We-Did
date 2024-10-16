@@ -14,18 +14,18 @@ export default function Navbar({
 }: NavbarProps) {
   return (
     <div className="w-full shadow-xl">
-      <nav className="mx-auto h-20 max-w-[1366px] flex items-center justify-between">
-        <div className="flex w-1/3">
-          <h1 className="pb-2 ml-4 text-4xl font-bold text-teal-600 flex items-center">
+      <nav className="mx-auto w-full h-16 max-w-[1366px] flex items-center justify-between p-5">
+        <div className="flex w-1/5">
+          {/* <h1 className="pb-2 ml-4 text-4xl font-bold text-teal-600 flex items-center">
             TodoApp
-          </h1>
+          </h1> */}
           <img
-            className="w-12 ml-1"
+            className="w-12 ml-2 bg-zinc-300 border-spacing-3 border-zinc-700 bg- rounded-lg"
             src="/check-icon-big.png"
             alt="check icon"
           />
         </div>
-        <ul className="flex gap-11 w-1/3 items-center justify-center">
+        <ul className="flex gap-11 w-4/5 items-center justify-center">
           {navLinks.map((navLink) => (
             <li key={navLink.name}>
               <button
@@ -39,7 +39,7 @@ export default function Navbar({
             </li>
           ))}
         </ul>
-        <div className="w-1/3 flex justify-end">{children}</div>
+        <div className="flex justify-end">{children}</div>
       </nav>
     </div>
   );

@@ -10,9 +10,9 @@ interface PaperProps {
 
 const Paper = ({ onClick, title, children, bgColor }: PaperProps) => {
   return (
-    <div className={`w-1/3 ${bgColor} p-5 rounded-2xl`} onClick={onClick}>
+    <div className={`w-full ${bgColor} p-4 rounded-2xl`} onClick={onClick}>
       <Header2 title={title} />
-      {children}
+      <ol>{children}</ol>
     </div>
   );
 };

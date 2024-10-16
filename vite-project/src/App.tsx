@@ -24,6 +24,8 @@ import Login from "./components/Login";
 import SignUp from "./components/SignUp";
 import { userSignUp } from "./services/apiUsers";
 import Main from "./layouts/Main";
+import Paper from "./components/Paper";
+import TodoItem from "./components/TodoItem";
 
 function App() {
   const [selectedNavLink, setSelectedNavLink] = useState("present");
@@ -170,13 +172,13 @@ function App() {
       >
         <button
           onClick={() => setSignUpIsShown(true)}
-          className="bg-fuchsia-900 text-fuchsia-200 py-2 px-6 text-lg rounded-full"
+          className="hidden bg-fuchsia-900 text-fuchsia-200 py-2 px-6 text-lg rounded-full"
         >
           Sign Up
         </button>
         <button
           onClick={() => setLoginIsShown(true)}
-          className="bg-fuchsia-900 text-fuchsia-200 py-2 px-6 text-lg rounded-full mx-5"
+          className="hidden bg-fuchsia-900 text-fuchsia-200 py-2 px-6 text-lg rounded-full mx-5"
         >
           Login
         </button>
@@ -200,19 +202,25 @@ function App() {
           )}
 
           {selectedNavLink === "present" && (
-            <List
-              key={1}
-              title={"Today"}
+            <Paper
+              title="Today"
+              bgColor={"bg-sky-300"}
               onClick={() => setSelectedNavLink("present")}
-              data={mainData}
-              bgColor="bg-sky-300"
-              selectedBgColor="bg-sky-200"
-              onDeleteTodo={handleDeleteTodo}
-              onEditTodo={handleEditTodo}
-              onPastClick={handleToPast}
-              onPresentClick={handleToPresent}
-              onFutureClick={handleToFuture}
-            />
+            >
+              {mainData.map((item, index) => (
+                <TodoItem
+                  key={item.title}
+                  data={item}
+                  index={index}
+                  onDeleteTodo={handleDeleteTodo}
+                  onEditTodo={handleEditTodo}
+                  selectedBgColor={"bg-sky-200"}
+                  onPastClick={handleToPast}
+                  onPresentClick={handleToPresent}
+                  onFutureClick={handleToFuture}
+                />
+              ))}
+            </Paper>
           )}
 
           {selectedNavLink === "future" && (

@@ -29,21 +29,19 @@ const List = ({
 }: ListProps) => {
   return (
     <Paper onClick={onClick} title={title} bgColor={bgColor}>
-      <ol>
-        {data.map((data, index) => (
-          <TodoItem
-            key={data.title}
-            data={data}
-            index={index}
-            onDeleteTodo={onDeleteTodo}
-            onEditTodo={onEditTodo}
-            selectedBgColor={selectedBgColor}
-            onPastClick={onPastClick}
-            onPresentClick={onPresentClick}
-            onFutureClick={onFutureClick}
-          />
-        ))}
-      </ol>
+      {data.map((data, index) => (
+        <TodoItem
+          key={data.title}
+          data={data}
+          index={index}
+          onDeleteTodo={onDeleteTodo}
+          onEditTodo={onEditTodo}
+          selectedBgColor={selectedBgColor}
+          onPastClick={onPastClick}
+          onPresentClick={onPresentClick}
+          onFutureClick={onFutureClick}
+        />
+      ))}
     </Paper>
   );
 };

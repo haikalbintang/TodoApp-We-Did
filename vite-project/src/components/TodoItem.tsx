@@ -3,6 +3,8 @@ import { GetItem } from "../types";
 import { ImCross } from "react-icons/im";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { FaPencil } from "react-icons/fa6";
+import DisplayTodoItem from "./DisplayTodoItem";
+import TimelineButton from "./TimelineButton";
 
 interface TodoItemProps {
   data: GetItem;
@@ -64,25 +66,12 @@ export default function TodoItem({
       }`}
     >
       <div className="flex justify-between" onClick={handleToggleDesc}>
-        <div>
-          <h2 className="border-zinc-700 font-semibold">
-            {index + 1}. {data.title}
-          </h2>
-          <h3 className="text-sm">{data.subtitle}</h3>
-        </div>
+        <DisplayTodoItem index={index} data={data} />
+
         <div className="flex gap-2 items-start mt-1">
-          <button
-            onClick={handleToPast}
-            className="h-4 w-4 rounded-full bg-emerald-300 border-2 border-zinc-700 hover:border-orange-300 hover:cursor-pointer"
-          ></button>
-          <button
-            onClick={handleToPresent}
-            className="h-4 w-4 rounded-full bg-sky-300 border-2 border-zinc-700 hover:border-orange-300 hover:cursor-pointer"
-          ></button>
-          <button
-            onClick={handleToFuture}
-            className="h-4 w-4 rounded-full bg-orange-300 border-2 border-zinc-700 hover:border-orange-300 hover:cursor-pointer"
-          ></button>
+          <TimelineButton color="emerald" onClick={handleToPast} />
+          <TimelineButton color="sky" onClick={handleToPresent} />
+          <TimelineButton color="orange" onClick={handleToFuture} />
         </div>
       </div>
       {descIsShown && (
