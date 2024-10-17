@@ -8,7 +8,10 @@ interface InputTextProps {
 const InputText = ({ label, name, value, onChange }: InputTextProps) => {
   return (
     <div className="flex flex-col gap-2 p-3 bg-sky-200 my-3 rounded-lg">
-      <label className="text-left font-semibold" htmlFor={name}>
+      <label
+        className="text-left font-bold px-2 rounded-md bg-sky-300"
+        htmlFor={name}
+      >
         {label}
       </label>
       <input

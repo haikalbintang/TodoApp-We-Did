@@ -24,8 +24,7 @@ import Login from "./components/Login";
 import SignUp from "./components/SignUp";
 import { userSignUp } from "./services/apiUsers";
 import Main from "./layouts/Main";
-import Paper from "./layouts/Paper";
-import TodoItem from "./components/TodoItem";
+import DeleteModal from "./components/DeleteModal";
 
 function App() {
   const [selectedNavLink, setSelectedNavLink] = useState("present");
@@ -36,6 +35,8 @@ function App() {
   const [todoToEdit, setTodoToEdit] = useState<GetItem | null>(null);
   const [signUpIsShown, setSignUpIsShown] = useState(false);
   const [loginIsShown, setLoginIsShown] = useState(false);
+  const [deleteIsShown, setDeleteIsShown] = useState(false);
+  const [todoToDelete, setTodoToDelete] = useState<number | null>(null);
 
   useEffect(() => {
     fetchTodos();
@@ -87,13 +88,27 @@ function App() {
     setFormIsShown(false);
   }
 
-  async function handleDeleteTodo(id: number) {
-    try {
-      await deleteTodo(id);
+  function handleDeleteTodo(id: number) {
+    setTodoToDelete(id);
+    setDeleteIsShown(true);
+  }
 
-      setPastData((prevData) => prevData.filter((todo) => todo.id !== id));
-      setMainData((prevData) => prevData.filter((todo) => todo.id !== id));
-      setFutureData((prevData) => prevData.filter((todo) => todo.id !== id));
+  async function confirmDelete() {
+    try {
+      if (todoToDelete !== null) {
+        await deleteTodo(todoToDelete);
+      }
+
+      setPastData((prevData) =>
+        prevData.filter((todo) => todo.id !== todoToDelete)
+      );
+      setMainData((prevData) =>
+        prevData.filter((todo) => todo.id !== todoToDelete)
+      );
+      setFutureData((prevData) =>
+        prevData.filter((todo) => todo.id !== todoToDelete)
+      );
+      setDeleteIsShown(false);
     } catch (error) {
       console.error("Failed to delete todo:", error);
     }
@@ -202,25 +217,21 @@ function App() {
           )}
 
           {selectedNavLink === "present" && (
-            <Paper
-              title="Today"
-              bgColor={"bg-sky-300"}
-              onClick={() => setSelectedNavLink("present")}
-            >
-              {mainData.map((item, index) => (
-                <TodoItem
-                  key={item.title}
-                  data={item}
-                  index={index}
-                  onDeleteTodo={handleDeleteTodo}
-                  onEditTodo={handleEditTodo}
-                  selectedBgColor={"bg-sky-200"}
-                  onPastClick={handleToPast}
-                  onPresentClick={handleToPresent}
-                  onFutureClick={handleToFuture}
-                />
-              ))}
-            </Paper>
+            <>
+              <List
+                key={1}
+                title={"Today"}
+                onClick={() => setSelectedNavLink("present")}
+                data={mainData}
+                bgColor="bg-sky-300"
+                selectedBgColor="bg-sky-200"
+                onDeleteTodo={handleDeleteTodo}
+                onEditTodo={handleEditTodo}
+                onPastClick={handleToPast}
+                onPresentClick={handleToPresent}
+                onFutureClick={handleToFuture}
+              />
+            </>
           )}
 
           {selectedNavLink === "future" && (
@@ -255,6 +266,12 @@ function App() {
           onClose={() => setFormIsShown(false)}
           onSubmit={handleAddTodo}
           initialData={todoToEdit}
+        />
+      )}
+      {deleteIsShown && (
+        <DeleteModal
+          onClose={() => setDeleteIsShown(false)}
+          onDelete={confirmDelete}
         />
       )}
       {loginIsShown && (

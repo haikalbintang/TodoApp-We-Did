@@ -5,6 +5,8 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import { FaPencil } from "react-icons/fa6";
 import DisplayTodoItem from "./DisplayTodoItem";
 import TimelineButton from "./TimelineButton";
+import TodoItemWrapper from "../layouts/TodoItemWrapper";
+import TodoDesc from "../layouts/TodoDesc";
 
 interface TodoItemProps {
   data: GetItem;
@@ -29,18 +31,6 @@ export default function TodoItem({
 }: TodoItemProps) {
   const [descIsShown, setDescIsShown] = useState(false);
 
-  function handleToggleDesc() {
-    setDescIsShown((prev) => !prev);
-  }
-
-  function handleDelete() {
-    onDeleteTodo(data.id);
-  }
-
-  function handleEdit() {
-    onEditTodo(data);
-  }
-
   function handleToPast(e: React.MouseEvent<HTMLButtonElement>) {
     e.stopPropagation();
     onPastClick(data.id);
@@ -57,15 +47,13 @@ export default function TodoItem({
   }
 
   return (
-    <li
-      key={index}
-      className={`${
-        descIsShown ? selectedBgColor : ""
-      } py-3 border-b border-zinc-700 hover:${selectedBgColor} px-2 hover:cursor-pointer ${
-        data.status === "done" ? "text-zinc-500" : ""
-      }`}
+    <TodoItemWrapper
+      index={index}
+      descIsShown={descIsShown}
+      selectedBgColor={selectedBgColor}
+      data={data}
     >
-      <div className="flex justify-between" onClick={handleToggleDesc}>
+      <div className="flex justify-between" onClick={() => setDescIsShown((prev) => !prev)}>
         <DisplayTodoItem index={index} data={data} />
 
         <div className="flex gap-2 items-start mt-1">
@@ -75,39 +63,30 @@ export default function TodoItem({
         </div>
       </div>
       {descIsShown && (
-        <div className="relative pl-5 hover:cursor-default overflow-x-clip">
-          <ul>
-            {data.descriptions?.map((description: string, index: number) =>
-              description !== "" ? (
-                <li className="list-disc mt-1 text-sm" key={index}>
-                  {description}
-                </li>
-              ) : null
-            )}
-          </ul>
+        <TodoDesc data={data}>
           <div
             title="close"
             onClick={() => setDescIsShown(false)}
-            className="absolute text-sm -right-0.5 bottom-0.5 w-4 h-4 rounded-full text-red-800 cursor-pointer"
+            className="absolute text-base right-0 -bottom-1 w-4 h-4 rounded-full text-zinc-700 cursor-pointer"
           >
             <ImCross />
           </div>
           <div
             title="delete"
-            className="absolute text-sm right-5 bottom-0.5 w-4 h-4 rounded-full text-zinc-950 cursor-pointer"
-            onClick={handleDelete}
+            className="absolute text-base right-6 -bottom-1 w-4 h-4 rounded-full text-red-800 cursor-pointer"
+            onClick={() => onDeleteTodo(data.id)}
           >
             <FaRegTrashAlt />
           </div>
           <div
             title="edit"
-            className="absolute text-sm right-10 bottom-0.5 w-4 h-4 rounded-full text-zinc-950 cursor-pointer"
-            onClick={handleEdit}
+            className="absolute text-base right-12 -bottom-1 w-4 h-4 rounded-full text-zinc-800 cursor-pointer"
+            onClick={() => onEditTodo(data)}
           >
             <FaPencil />
           </div>
-        </div>
+        </TodoDesc>
       )}
-    </li>
+    </TodoItemWrapper>
   );
 }
