@@ -19,13 +19,14 @@ export default function Navbar({
           <h1 className="hidden pb-2 ml-4 text-4xl font-bold text-teal-600 items-center">
             TodoApp
           </h1>
-          <div className="absolute -rotate-[30deg] -top-6 w-12 ml-2 bg-zinc-300 rounded-lg">
+          <div className="absolute -rotate-[16deg] -top-6 w-12 ml-2 bg-zinc-300 rounded-lg">
             <img
-              className="transform rotate-[30deg] p-1"
+              className="transform rotate-[16deg] p-1"
               src="/check-icon-big.png"
               alt="check icon"
             />
           </div>
+          <div className="-z-10 absolute -rotate-[36deg] -top-6 w-12 h-12 ml-2 bg-teal-200 rounded-lg"></div>
         </div>
         <ul className="flex gap-11 w-4/5 items-center justify-center">
           {navLinks.map((navLink) => (
