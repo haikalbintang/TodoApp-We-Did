@@ -5,12 +5,14 @@ interface NavbarProps {
   children: ReactNode;
   selectedNavLink: string;
   setSelectedNavLink: (navLink: string) => void;
+  onClickLogin: () => void
 }
 
 export default function Navbar({
   children,
   selectedNavLink,
   setSelectedNavLink,
+  onClickLogin
 }: NavbarProps) {
   return (
     <div className="w-full shadow-xl">
@@ -19,7 +21,7 @@ export default function Navbar({
           <h1 className="hidden pb-2 ml-4 text-4xl font-bold text-teal-600 items-center">
             TodoApp
           </h1>
-          <div className="absolute -rotate-[16deg] -top-6 w-12 ml-2 bg-zinc-300 rounded-lg">
+          <div onClick={onClickLogin} className="absolute -rotate-[16deg] -top-6 w-12 ml-2 bg-zinc-300 rounded-lg">
             <img
               className="transform rotate-[16deg] p-1"
               src="/check-icon-big.png"

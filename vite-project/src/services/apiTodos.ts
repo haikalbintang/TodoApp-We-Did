@@ -43,20 +43,28 @@ export async function getFutureTodos() {
   return data;
 }
 
-export async function createTodo(newTodo: CreateItem) {
-  const { data, error } = await supabase
-    .from("todos")
-    .insert([newTodo])
-    .select();
+// export async function createTodo(newTodo: CreateItem) {
+//   const {
+//     data: { session },
+//   } = await supabase.auth.getSession();
 
-  if (error) {
-    console.error(error);
-    throw new Error("Todo item could not be created");
-  } else {
-    console.log("Todo created:", data);
-    return data;
-  }
-}
+//   if (session) {
+//     const user = session.user;
+
+//     const { data, error } = await supabase
+//       .from("todos")
+//       .insert({ ...newTodo, user_id: user.id })
+//       .select();
+
+//     if (error) {
+//       console.error(error);
+//       throw new Error("Todo item could not be created");
+//     } else {
+//       console.log("Todo created:", data);
+//       return data;
+//     }
+//   }
+// }
 
 export async function deleteTodo(id: number) {
   const response = await supabase.from("todos").delete().eq("id", id);

@@ -74,6 +74,7 @@ const AddItemForm = ({ onClose, onSubmit, initialData }: AddItemFormProps) => {
             label="Title:"
             name="title"
             value={currentTodoItem["title"]}
+            type="text"
             onChange={(e) =>
               setCurrentTodoItem((prev) => ({
                 ...prev,
@@ -85,6 +86,7 @@ const AddItemForm = ({ onClose, onSubmit, initialData }: AddItemFormProps) => {
             label="Subtitle:"
             name="subtitle"
             value={currentTodoItem["subtitle"]}
+            type="text"
             onChange={(e) =>
               setCurrentTodoItem((prev) => ({
                 ...prev,
@@ -98,6 +100,7 @@ const AddItemForm = ({ onClose, onSubmit, initialData }: AddItemFormProps) => {
               label={`Desc ${index + 1}:`}
               name={`description-${index}`}
               value={description}
+              type="text"
               onChange={(e) => handleDescriptionChange(index, e.target.value)}
             />
           ))}
