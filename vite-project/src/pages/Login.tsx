@@ -20,7 +20,7 @@ const Login = () => {
     handleLogin(loginData);
   }
   return (
-    <Overlay onClose={() => navigate("/landing")}>
+    <Overlay onClose={() => navigate("/")}>
       <Modal>
         <Header2 title="Login" />
         <form onSubmit={handleSubmit} action="">

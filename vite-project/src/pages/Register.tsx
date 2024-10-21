@@ -22,7 +22,7 @@ const Register = () => {
     handleSignUp(signUpData);
   }
   return (
-    <Overlay onClose={() => navigate("/landing")}>
+    <Overlay onClose={() => navigate("/")}>
       <Modal>
         <Header2 title="Sign Up" />
         <form onSubmit={handleSubmit} action="">
