@@ -1,20 +1,17 @@
 import Modal from "../layouts/Modal";
 import Overlay from "../layouts/Overlay";
 import { LoginCredentials } from "../types";
-import Header2 from "./Header2";
-import InputText from "./InputText";
+import Header2 from "../components/Header2";
+import InputText from "../components/InputText";
 import { useState } from "react";
-
-interface LoginProps {
-  onClose: () => void;
-  onSubmit: (loginCredential: LoginCredentials) => void;
-}
+import { useNavigate } from "react-router-dom";
 
 const Login = ({ onClose, onSubmit }: LoginProps) => {
   const [currentLogin, setCurrentLogin] = useState({
     email: "superstarstark@gmail.com",
     password: "asdasd",
   });
+  const navigate = useNavigate();
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -30,7 +27,7 @@ const Login = ({ onClose, onSubmit }: LoginProps) => {
     onClose();
   }
   return (
-    <Overlay onClose={onClose}>
+    <Overlay onClose={() => navigate("/landing")}>
       <Modal>
         <Header2 title="Login" />
         <form onSubmit={handleSubmit} action="">
