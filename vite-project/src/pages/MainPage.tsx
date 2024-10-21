@@ -1,7 +1,6 @@
 import { useState } from "react";
 
 import useTodos from "../hooks/useTodos";
-import useAuth from "../hooks/useAuth";
 
 import Main from "../layouts/Main";
 import Navbar from "../components/Navbar";
@@ -27,15 +26,6 @@ function MainPage() {
     todoToEdit,
   } = useTodos();
 
-  const {
-    loginIsShown,
-    signUpIsShown,
-    setLoginIsShown,
-    setSignUpIsShown,
-    handleLogin,
-    handleSignUp,
-  } = useAuth();
-
   const [selectedNavLink, setSelectedNavLink] = useState("present");
   const [formIsShown, setFormIsShown] = useState(false);
   const [deleteIsShown, setDeleteIsShown] = useState(false);
@@ -60,16 +50,16 @@ function MainPage() {
       <Navbar
         selectedNavLink={selectedNavLink}
         setSelectedNavLink={setSelectedNavLink}
-        onClickLogin={() => setLoginIsShown(true)}
+        // onClickLogin={() => setLoginIsShown(true)}
       >
         <button
-          onClick={() => setSignUpIsShown(true)}
+          // onClick={() => setSignUpIsShown(true)}
           className="hidden bg-fuchsia-900 text-fuchsia-200 py-2 px-6 text-lg rounded-full"
         >
           Sign Up
         </button>
         <button
-          onClick={() => setLoginIsShown(true)}
+          // onClick={() => setLoginIsShown(true)}
           className="hidden bg-fuchsia-900 text-fuchsia-200 py-2 px-6 text-lg rounded-full mx-5"
         >
           Login
@@ -150,15 +140,6 @@ function MainPage() {
           onDelete={handleConfirmDelete}
         />
       )}
-      {/* {loginIsShown && (
-        <Login onClose={() => setLoginIsShown(false)} onSubmit={handleLogin} />
-      )}
-      {signUpIsShown && (
-        <SignUp
-          onClose={() => setSignUpIsShown(false)}
-          onSubmit={handleSignUp}
-        />
-      )} */}
     </div>
   );
 }

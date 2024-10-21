@@ -1,34 +1,25 @@
 import Modal from "../layouts/Modal";
 import Overlay from "../layouts/Overlay";
-import { SignUpCredentials } from "../types";
 import Header2 from "../components/Header2";
 import InputText from "../components/InputText";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 
-interface RegisterProps {
-  onClose: () => void;
-  onSubmit: (signUpCredentials: SignUpCredentials) => void;
-}
-
-const Register = ({ onClose, onSubmit }: RegisterProps) => {
+const Register = () => {
   const [currentSignUp, setCurrentSignUp] = useState({
     nickname: "",
     username: "",
     email: "",
     password: "",
   });
+  const { handleSignUp } = useAuth();
   const navigate = useNavigate();
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     const signUpData = currentSignUp;
-    console.log(signUpData);
-
-    onSubmit(signUpData);
-
-    setCurrentSignUp({ nickname: "", username: "", email: "", password: "" });
-    onClose();
+    handleSignUp(signUpData);
   }
   return (
     <Overlay onClose={() => navigate("/landing")}>
