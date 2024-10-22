@@ -2,9 +2,16 @@ import { CreateItem, GetItem } from "../types";
 import supabase from "./supabase";
 
 export async function getPastTodos() {
+  const userId = localStorage.getItem("userId");
+
+  if (!userId) {
+    throw new Error("User ID not found");
+  }
+
   const { data, error } = await supabase
     .from("todos")
     .select("*")
+    .eq("user_id", userId)
     .eq("time", 1);
 
   if (error) {
@@ -16,9 +23,16 @@ export async function getPastTodos() {
 }
 
 export async function getPresentTodos() {
+  const userId = localStorage.getItem("userId");
+
+  if (!userId) {
+    throw new Error("User ID not found");
+  }
+
   const { data, error } = await supabase
     .from("todos")
     .select("*")
+    .eq("user_id", userId)
     .eq("time", 2);
 
   if (error) {
@@ -30,9 +44,16 @@ export async function getPresentTodos() {
 }
 
 export async function getFutureTodos() {
+  const userId = localStorage.getItem("userId");
+
+  if (!userId) {
+    throw new Error("User ID not found");
+  }
+
   const { data, error } = await supabase
     .from("todos")
     .select("*")
+    .eq("user_id", userId)
     .eq("time", 3);
 
   if (error) {

@@ -21,7 +21,9 @@ export async function userLogin(LoginCredentials: LoginCredentials) {
   if (error) {
     return {error};
   } else {
+    const userId = data.user.id
     console.log("User login:", data);
+    localStorage.setItem('userId', userId)
     return {data};
   }
 }
