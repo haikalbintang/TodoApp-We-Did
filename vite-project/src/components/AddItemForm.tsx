@@ -68,7 +68,7 @@ const AddItemForm = ({ onClose, onSubmit, initialData }: AddItemFormProps) => {
   return (
     <Overlay onClose={onClose}>
       <Modal>
-        <Header2 title="New To-do" />
+        <Header2 title="New Todo" />
         <Form onSubmit={handleSubmit}>
           <InputText
             label="Title:"

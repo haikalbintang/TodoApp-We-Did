@@ -2,15 +2,32 @@ import { SignUpCredentials, LoginCredentials } from "../types";
 import supabase from "./supabase";
 
 export async function userSignUp(SignUpCredentials: SignUpCredentials) {
-  const { data, error } = await supabase.auth.signUp(SignUpCredentials);
+  const { data, error } = await supabase.auth.signUp({
+    email: SignUpCredentials.email,
+    password: SignUpCredentials.password,
+  });
 
   if (error) {
-    console.error(error);
+    console.error("Error during sign up:", error);
     return { error };
-  } else {
-    console.log("User created:", data);
-    return { data };
   }
+
+  const userId = data.user?.id;
+
+  const { error: profileError } = await supabase.from("profiles").insert([
+    {
+      id: userId,
+      nickname: SignUpCredentials.nickname,
+      username: SignUpCredentials.username,
+      email: SignUpCredentials.email,
+    },
+  ]);
+
+  if (profileError) {
+    console.error("Error adding profile:", profileError);
+    return { error: profileError };
+  }
+  return { data: data.user };
 }
 
 export async function userLogin(LoginCredentials: LoginCredentials) {
@@ -19,12 +36,12 @@ export async function userLogin(LoginCredentials: LoginCredentials) {
   );
 
   if (error) {
-    return {error};
+    return { error };
   } else {
-    const userId = data.user.id
+    const userId = data.user.id;
     console.log("User login:", data);
-    localStorage.setItem('userId', userId)
-    return {data};
+    localStorage.setItem("userId", userId);
+    return { data };
   }
 }
 
@@ -36,3 +53,4 @@ export async function resetPassword(email: string) {
     console.log("Password reset email sent:", data);
   }
 }
+

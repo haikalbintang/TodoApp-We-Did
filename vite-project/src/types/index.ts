@@ -28,3 +28,7 @@ export interface SignUpCredentials {
   email: string,
   password: string
 }
+
+export interface Profile {
+  nickname: string
+}

@@ -39,6 +39,7 @@ const Register = () => {
     });
 
     const { error, data } = await userSignUp(currentSignUp);
+
     if (error) {
       setErrorMessage((prev) => ({ ...prev, password: error.message })); // Fix later
       console.log("a", error);

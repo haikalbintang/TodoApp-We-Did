@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import useTodos from "../hooks/useTodos";
 
@@ -9,8 +9,9 @@ import Form from "../components/AddItemForm";
 import DeleteModal from "../components/DeleteModal";
 
 import { FaFeather } from "react-icons/fa6";
-import { GetItem } from "../types";
+import { GetItem, Profile } from "../types";
 import { useNavigate } from "react-router-dom";
+import supabase from "../services/supabase";
 
 function MainPage() {
   const {
@@ -26,11 +27,38 @@ function MainPage() {
     confirmDelete,
     todoToEdit,
   } = useTodos();
-
+  const [profile, setProfile] = useState<Profile>({ nickname: "" });
   const [selectedNavLink, setSelectedNavLink] = useState("present");
   const [formIsShown, setFormIsShown] = useState(false);
   const [deleteIsShown, setDeleteIsShown] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser(); // Mengambil user yang sedang login
+
+      if (user) {
+        const { data, error } = await supabase
+          .from("profiles")
+          .select("nickname")
+          .eq("id", user.id) // Menggunakan ID dari user yang sudah terautentikasi
+          .single();
+
+        if (error) {
+          console.error("Error fetching profile:", error.message);
+        } else if (data) {
+          setProfile((prev) => ({ ...prev, nickname: data.nickname })); // Simpan nickname ke state
+        }
+      } else if (userError) {
+        console.error("Error fetching user:", userError.message);
+      }
+    };
+
+    fetchProfile();
+  }, []);
 
   function handleEdit(todo: GetItem) {
     handleEditTodo(todo);
@@ -152,6 +180,7 @@ function MainPage() {
       </div>
 
       <div className="m-6">
+        <p>not {profile.nickname}?</p>
         <p
           onClick={handleLogout}
           className="cursor-pointer text-fuchsia-600 underline"
