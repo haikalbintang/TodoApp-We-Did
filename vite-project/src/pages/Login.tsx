@@ -22,6 +22,7 @@ const Login = () => {
     if (error) {
       setErrorMessage(error.message);
     } else if (data) {
+      console.log(data);
       navigate("/main");
     }
   }

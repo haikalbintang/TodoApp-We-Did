@@ -5,7 +5,7 @@ interface MainProps {
 }
 const Main = ({ children }: MainProps) => {
   return (
-    <main className="h-fit flex justify-center pt-6 pb-0 gap-4">
+    <main className="h-fit flex flex-col justify-center pt-6 pb-0 gap-4">
       {children}
     </main>
   );
