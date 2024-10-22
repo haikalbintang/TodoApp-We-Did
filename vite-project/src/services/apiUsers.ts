@@ -6,10 +6,10 @@ export async function userSignUp(SignUpCredentials: SignUpCredentials) {
 
   if (error) {
     console.error(error);
-    throw new Error("User could not be created");
+    return { error };
   } else {
     console.log("User created:", data);
-    return data;
+    return { data };
   }
 }
 
@@ -19,10 +19,18 @@ export async function userLogin(LoginCredentials: LoginCredentials) {
   );
 
   if (error) {
-    console.error(error);
-    throw new Error(error.message);
+    return {error};
   } else {
     console.log("User login:", data);
-    return data;
+    return {data};
+  }
+}
+
+export async function resetPassword(email: string) {
+  const { data, error } = await supabase.auth.resetPasswordForEmail(email);
+  if (error) {
+    console.error("Error sending password reset email:", error.message);
+  } else {
+    console.log("Password reset email sent:", data);
   }
 }

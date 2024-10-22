@@ -1,21 +1,21 @@
-import { LoginCredentials, SignUpCredentials } from "../types";
-import { userLogin, userSignUp } from "../services/apiUsers";
+// import { LoginCredentials, SignUpCredentials } from "../types";
+// import { userLogin, userSignUp } from "../services/apiUsers";
 
-function useAuth() {
-  async function handleLogin(loginData: LoginCredentials) {
-    await userLogin(loginData);
-    console.log(loginData);
-  }
+// function useAuth() {
+//   async function handleLogin(loginData: LoginCredentials) {
+//     console.log(loginData);
+//     return await userLogin(loginData);
+//   }
 
-  async function handleSignUp(signUpCredentials: SignUpCredentials) {
-    await userSignUp(signUpCredentials);
-    console.log(signUpCredentials);
-  }
+//   async function handleSignUp(signUpCredentials: SignUpCredentials) {
+//     console.log(signUpCredentials);
+//     const { data, error } = await userSignUp(signUpCredentials);
+//   }
 
-  return {
-    handleLogin,
-    handleSignUp,
-  };
-}
+//   return {
+//     handleLogin,
+//     handleSignUp,
+//   };
+// }
 
-export default useAuth;
+// export default useAuth;

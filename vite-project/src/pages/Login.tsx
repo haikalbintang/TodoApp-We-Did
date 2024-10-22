@@ -4,20 +4,26 @@ import Header2 from "../components/Header2";
 import InputText from "../components/InputText";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useAuth from "../hooks/useAuth";
+import { userLogin } from "../services/apiUsers";
 
 const Login = () => {
   const [currentLogin, setCurrentLogin] = useState({
     email: "",
     password: "",
   });
-  const { handleLogin } = useAuth();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const loginData = currentLogin;
-    handleLogin(loginData);
+    setErrorMessage(null);
+
+    const { error, data } = await userLogin(currentLogin);
+    if (error) {
+      setErrorMessage(error.message);
+    } else if (data) {
+      navigate("/main");
+    }
   }
   return (
     <Overlay onClose={() => navigate("/")}>
@@ -50,6 +56,10 @@ const Login = () => {
               }
             />
           </div>
+
+          {errorMessage && (
+            <p className="text-red-600 text-sm ml-4">{errorMessage}</p>
+          )}
 
           <div className="flex items-center justify-end">
             <button

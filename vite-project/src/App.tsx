@@ -3,6 +3,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import MainPage from "./pages/MainPage";
 import LandingPage from "./pages/LandingPage";
+// import ResetPassword from "./pages/Temp";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/main" element={<MainPage />} />
+        {/* <Route path="/reset-password/:token" element={<ResetPassword />} /> */}
       </Routes>
     </Router>
   );

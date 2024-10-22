@@ -4,8 +4,15 @@ import Header2 from "../components/Header2";
 import InputText from "../components/InputText";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useAuth from "../hooks/useAuth";
 
+import { userSignUp } from "../services/apiUsers";
+
+interface ErrorRegister {
+  nickname: null | string;
+  username: null | string;
+  email: null | string;
+  password: null | string;
+}
 const Register = () => {
   const [currentSignUp, setCurrentSignUp] = useState({
     nickname: "",
@@ -13,14 +20,45 @@ const Register = () => {
     email: "",
     password: "",
   });
-  const { handleSignUp } = useAuth();
+
+  const [errorMessage, setErrorMessage] = useState<ErrorRegister>({
+    nickname: null,
+    username: null,
+    email: null,
+    password: null,
+  });
   const navigate = useNavigate();
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const signUpData = currentSignUp;
-    handleSignUp(signUpData);
+    setErrorMessage({
+      nickname: null,
+      username: null,
+      email: null,
+      password: null,
+    });
+
+    const { error, data } = await userSignUp(currentSignUp);
+    if (error) {
+      setErrorMessage((prev) => ({ ...prev, password: error.message })); // Fix later
+      console.log("a", error);
+      console.error("b", error);
+    } else if (data) {
+      navigate("/login");
+    }
   }
+
+  function handleBlurUsername() {
+    if (currentSignUp["username"].length < 4) {
+      setErrorMessage((prev) => ({
+        ...prev,
+        username: "Username should be at least 4 characters.",
+      }));
+    } else {
+      setErrorMessage((prev) => ({ ...prev, username: null }));
+    }
+  }
+
   return (
     <Overlay onClose={() => navigate("/")}>
       <Modal>
@@ -28,7 +66,7 @@ const Register = () => {
         <form onSubmit={handleSubmit} action="">
           <div className="">
             <InputText
-              label="Name:"
+              label="Display Name:"
               name="nickname"
               value={currentSignUp["nickname"]}
               type="text"
@@ -44,13 +82,21 @@ const Register = () => {
               name="username"
               value={currentSignUp["username"]}
               type="text"
+              onBlur={handleBlurUsername}
               onChange={(e) =>
                 setCurrentSignUp((prev) => ({
                   ...prev,
                   username: e.target.value,
                 }))
               }
-            />
+            >
+              {errorMessage.username && (
+                <p className="text-fuchsia-600 text-sm ml-1">
+                  {errorMessage.username}
+                </p>
+              )}
+            </InputText>
+
             <InputText
               label="Email:"
               name="emal"
@@ -76,6 +122,12 @@ const Register = () => {
               }
             />
           </div>
+
+          {errorMessage.password && (
+            <p className="text-red-600 text-sm ml-4 mb-4">
+              {errorMessage.password}
+            </p>
+          )}
 
           <div className="flex items-center justify-end">
             <button
