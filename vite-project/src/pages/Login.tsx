@@ -50,10 +50,9 @@ const Login = () => {
     const { error, data } = await userLogin(currentLogin);
 
     if (error) {
-      console.log(error);
+      console.error(error);
       setErrorMessage((prev) => ({ ...prev, submit: "Invalid Credential" }));
     } else if (data) {
-      console.log(data);
       navigate("/main");
     }
   }

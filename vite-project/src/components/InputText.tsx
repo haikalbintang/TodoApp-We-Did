@@ -5,6 +5,7 @@ interface InputTextProps {
   name: string;
   value: string;
   type: string;
+  color: string;
   children?: ReactNode;
   onBlur?: () => void;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -15,14 +16,15 @@ const InputText = ({
   name,
   value,
   type,
+  color,
   children,
   onBlur,
   onChange,
 }: InputTextProps) => {
   return (
-    <div className="flex flex-col gap-2 p-3 bg-sky-200 my-3 rounded-lg">
+    <div className={`flex flex-col gap-2 p-3 bg-${color}-200 my-3 rounded-lg`}>
       <label
-        className="text-left font-bold px-2 rounded-md bg-sky-300"
+        className={`text-left font-bold px-2 rounded-md bg-${color}-300`}
         htmlFor={name}
       >
         {label}

@@ -28,7 +28,7 @@ function MainPage() {
     todoToEdit,
   } = useTodos();
   const [profile, setProfile] = useState<Profile>({ nickname: "" });
-  const [selectedNavLink, setSelectedNavLink] = useState("present");
+  const [selectedNavLink, setSelectedNavLink] = useState("daily");
   const [formIsShown, setFormIsShown] = useState(false);
   const [deleteIsShown, setDeleteIsShown] = useState(false);
   const navigate = useNavigate();
@@ -103,7 +103,7 @@ function MainPage() {
         </Navbar>
         <div className="mx-auto max-w-[1366px] px-4 pb-24">
           <Main>
-            {selectedNavLink === "past" && (
+            {selectedNavLink === "daily" && (
               <List
                 key={0}
                 title={"Daily Habit"}
@@ -119,7 +119,7 @@ function MainPage() {
               />
             )}
 
-            {selectedNavLink === "present" && (
+            {selectedNavLink === "today" && (
               <>
                 <List
                   key={1}
@@ -137,7 +137,7 @@ function MainPage() {
               </>
             )}
 
-            {selectedNavLink === "future" && (
+            {selectedNavLink === "later" && (
               <List
                 key={2}
                 title={"Todo List"}
