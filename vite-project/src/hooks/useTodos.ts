@@ -80,16 +80,56 @@ function useTodos() {
         )
       );
       setTodoToEdit(null);
-    } else {
-      const maxOrder =
-        mainData.length > 0
-          ? Math.max(...mainData.map((todo) => todo.order))
-          : 0;
-      const createdTodo = await createTodo({ ...newTodo, order: maxOrder + 1 });
-      setMainData((prevData) =>
-        [...prevData, createdTodo[0]].sort((a, b) => a.order - b.order)
-      );
-    }
+    } else
+      switch (newTodo.time) {
+        case 1:
+          {
+            const maxOrder =
+              pastData.length > 0
+                ? Math.max(...pastData.map((todo) => todo.order))
+                : 0;
+            const createdTodo = await createTodo({
+              ...newTodo,
+              order: maxOrder + 1,
+            });
+            setPastData((prevData) =>
+              [...prevData, createdTodo[0]].sort((a, b) => a.order - b.order)
+            );
+          }
+          break;
+        case 2:
+          {
+            const maxOrder =
+              mainData.length > 0
+                ? Math.max(...mainData.map((todo) => todo.order))
+                : 0;
+            const createdTodo = await createTodo({
+              ...newTodo,
+              order: maxOrder + 1,
+            });
+            setMainData((prevData) =>
+              [...prevData, createdTodo[0]].sort((a, b) => a.order - b.order)
+            );
+          }
+          break;
+        case 3:
+          {
+            const maxOrder =
+              futureData.length > 0
+                ? Math.max(...futureData.map((todo) => todo.order))
+                : 0;
+            const createdTodo = await createTodo({
+              ...newTodo,
+              order: maxOrder + 1,
+            });
+            setFutureData((prevData) =>
+              [...prevData, createdTodo[0]].sort((a, b) => a.order - b.order)
+            );
+          }
+          break;
+        default:
+          break;
+      }
   }
 
   async function handleToPast(id: number) {
@@ -98,6 +138,7 @@ function useTodos() {
         pastData.length > 0
           ? Math.max(...pastData.map((todo) => todo.order))
           : 0;
+
       await updateTodoToPast(id, maxOrder + 1);
 
       const updatedTodo =
@@ -122,7 +163,12 @@ function useTodos() {
 
   async function handleToPresent(id: number) {
     try {
-      await updateTodoToPresent(id);
+      const maxOrder =
+        mainData.length > 0
+          ? Math.max(...mainData.map((todo) => todo.order))
+          : 0;
+
+      await updateTodoToPresent(id, maxOrder + 1);
 
       const updatedTodo =
         pastData.find((todo) => todo.id === id) ||
@@ -134,7 +180,11 @@ function useTodos() {
 
       setPastData((prevData) => prevData.filter((todo) => todo.id !== id));
       setFutureData((prevData) => prevData.filter((todo) => todo.id !== id));
-      setMainData((prevData) => [...prevData, updatedTodo]);
+      setMainData((prevData) =>
+        [...prevData, { ...updatedTodo, order: maxOrder + 1 }].sort(
+          (a, b) => a.order - b.order
+        )
+      );
     } catch (error) {
       console.error("Failed to move todo", error);
     }
@@ -142,7 +192,12 @@ function useTodos() {
 
   async function handleToFuture(id: number) {
     try {
-      await updateTodoToFuture(id);
+      const maxOrder =
+        futureData.length > 0
+          ? Math.max(...futureData.map((todo) => todo.order))
+          : 0;
+
+      await updateTodoToFuture(id, maxOrder + 1);
 
       const updatedTodo =
         pastData.find((todo) => todo.id === id) ||
@@ -154,7 +209,11 @@ function useTodos() {
 
       setPastData((prevData) => prevData.filter((todo) => todo.id !== id));
       setMainData((prevData) => prevData.filter((todo) => todo.id !== id));
-      setFutureData((prevData) => [...prevData, updatedTodo]);
+      setFutureData((prevData) =>
+        [...prevData, { ...updatedTodo, order: maxOrder + 1 }].sort(
+          (a, b) => a.order - b.order
+        )
+      );
     } catch (error) {
       console.error("Failed to move todo", error);
     }

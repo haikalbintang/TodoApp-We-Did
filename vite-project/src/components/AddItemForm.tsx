@@ -8,6 +8,7 @@ import SubmitBtn from "./SubmitBtn";
 import AddDescBtn from "./AddDescBtn";
 import Form from "../layouts/Form";
 import TimelineButton from "./TimelineButton";
+import InputTextDesc from "./InputTextDesc";
 
 interface AddItemFormProps {
   onClose: () => void;
@@ -22,7 +23,7 @@ const AddItemForm = ({ onClose, onSubmit, initialData }: AddItemFormProps) => {
     descriptions: [""],
     status: "progress",
     priority: "high",
-    time: 2,
+    time: 3,
   });
   const [colorByTime, setColorByTime] = useState("sky");
 
@@ -69,7 +70,7 @@ const AddItemForm = ({ onClose, onSubmit, initialData }: AddItemFormProps) => {
       descriptions: [""],
       status: "progress",
       priority: "high",
-      time: 2,
+      time: 3,
     });
     onClose();
     // window.location.reload();
@@ -106,20 +107,35 @@ const AddItemForm = ({ onClose, onSubmit, initialData }: AddItemFormProps) => {
               }))
             }
           />
-          {currentTodoItem.descriptions.map((description, index) => (
-            <InputText
-              key={index}
-              label={`Desc ${index + 1}:`}
-              name={`description-${index}`}
-              value={description}
-              type="text"
-              color={colorByTime}
-              onChange={(e) => handleDescriptionChange(index, e.target.value)}
-            />
-          ))}
+          <InputTextDesc
+            label={
+              currentTodoItem.descriptions.length > 1
+                ? `Descriptions`
+                : "Description"
+            }
+            name={`description`}
+            color={colorByTime}
+          >
+            {currentTodoItem.descriptions.map((description, index) => (
+              <div className="flex gap-2 w-full">
+                <p className="text-xl">•</p>
+                <input
+                  id={description}
+                  name={`description-${index}`}
+                  type="text"
+                  value={description}
+                  onChange={(e) =>
+                    handleDescriptionChange(index, e.target.value)
+                  }
+                  className="text-sm ring border-2 border-zinc-800 py-1 px-2 rounded-lg w-full flex flex-wrap"
+                />
+              </div>
+            ))}
+          </InputTextDesc>
+
           <div className="flex items-center justify-between">
             <AddDescBtn onAddDescription={addDescription} color={colorByTime} />
-            <div className="flex gap-2 pr-3 pb-3">
+            <div className="flex gap-2 pr-4 pb-3">
               <TimelineButton
                 color="emerald"
                 type="button"

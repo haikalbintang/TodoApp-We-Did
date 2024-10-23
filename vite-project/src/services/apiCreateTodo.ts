@@ -23,6 +23,8 @@ export async function createTodo(newTodo: CreateItemAutoOrder) {
     .insert({ ...newTodo, user_id: user.id })
     .select();
 
+  console.log(newTodo);
+
   if (error) {
     console.error("Error creating todo:", error);
     throw new Error("Todo item could not be created");

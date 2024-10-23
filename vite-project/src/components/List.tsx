@@ -31,7 +31,7 @@ const List = ({
     <Paper onClick={onClick} title={title} bgColor={bgColor}>
       {data.map((data, index) => (
         <TodoItem
-          key={data.title}
+          key={data.id}
           data={data}
           index={index}
           onDeleteTodo={onDeleteTodo}
