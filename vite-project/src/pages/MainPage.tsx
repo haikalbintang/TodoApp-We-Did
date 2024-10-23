@@ -15,6 +15,7 @@ import supabase from "../services/supabase";
 
 function MainPage() {
   const {
+    isLoading,
     pastData,
     mainData,
     futureData,
@@ -26,6 +27,7 @@ function MainPage() {
     handleToFuture,
     confirmDelete,
     todoToEdit,
+    setTodoToEdit,
   } = useTodos();
   const [profile, setProfile] = useState<Profile>({ nickname: "" });
   const [selectedNavLink, setSelectedNavLink] = useState("today");
@@ -60,9 +62,18 @@ function MainPage() {
     fetchProfile();
   }, []);
 
+  function handleAddItemForm() {
+    setTodoToEdit(null);
+    setFormIsShown(true);
+  }
   function handleEdit(todo: GetItem) {
     handleEditTodo(todo);
     setFormIsShown(true);
+  }
+
+  function handleCloseForm() {
+    setTodoToEdit(null);
+    setFormIsShown(false);
   }
 
   function handleDelete(id: number) {
@@ -116,6 +127,7 @@ function MainPage() {
                 onPastClick={handleToPast}
                 onPresentClick={handleToPresent}
                 onFutureClick={handleToFuture}
+                isLoading={isLoading}
               />
             )}
 
@@ -133,6 +145,7 @@ function MainPage() {
                   onPastClick={handleToPast}
                   onPresentClick={handleToPresent}
                   onFutureClick={handleToFuture}
+                  isLoading={isLoading}
                 />
               </>
             )}
@@ -150,14 +163,13 @@ function MainPage() {
                 onPastClick={handleToPast}
                 onPresentClick={handleToPresent}
                 onFutureClick={handleToFuture}
+                isLoading={isLoading}
               />
             )}
           </Main>
 
           <div
-            onClick={() => {
-              setFormIsShown(true);
-            }}
+            onClick={handleAddItemForm}
             className="fixed cursor-pointer animate-bounce bg-teal-500 p-5 rounded-full right-5 bottom-6 shadow-zinc-600 shadow-lg"
           >
             <FaFeather className="text-4xl" />
@@ -166,7 +178,7 @@ function MainPage() {
 
         {formIsShown && (
           <Form
-            onClose={() => setFormIsShown(false)}
+            onClose={handleCloseForm}
             onSubmit={handleAddTodo}
             initialData={todoToEdit}
           />

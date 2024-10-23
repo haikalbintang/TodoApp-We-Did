@@ -16,6 +16,19 @@ interface AddItemFormProps {
   initialData: GetItem | null;
 }
 
+const getColorByTime = (time: number): string => {
+  switch (time) {
+    case 1:
+      return "emerald";
+    case 2:
+      return "sky";
+    case 3:
+      return "orange";
+    default:
+      return "orange"; // Default color if no match
+  }
+};
+
 const AddItemForm = ({ onClose, onSubmit, initialData }: AddItemFormProps) => {
   const [currentTodoItem, setCurrentTodoItem] = useState<CreateItem>({
     title: "",
@@ -25,20 +38,26 @@ const AddItemForm = ({ onClose, onSubmit, initialData }: AddItemFormProps) => {
     priority: "high",
     time: 3,
   });
-  const [colorByTime, setColorByTime] = useState("sky");
+  const [colorByTime, setColorByTime] = useState("orange");
+
+  const resetForm = () => {
+    setCurrentTodoItem({
+      title: "",
+      subtitle: "",
+      descriptions: [""],
+      status: "progress",
+      priority: "high",
+      time: 3,
+    });
+    setColorByTime("orange");
+  };
 
   useEffect(() => {
     if (initialData) {
       setCurrentTodoItem(initialData);
+      setColorByTime(getColorByTime(initialData.time));
     } else {
-      setCurrentTodoItem({
-        title: "",
-        subtitle: "",
-        descriptions: [""],
-        status: "progress",
-        priority: "high",
-        time: 2,
-      });
+      resetForm();
     }
   }, [initialData]);
 
@@ -58,20 +77,17 @@ const AddItemForm = ({ onClose, onSubmit, initialData }: AddItemFormProps) => {
     }));
   }
 
+  const handleTimeSelection = (color: string, time: number) => {
+    setColorByTime(color);
+    setCurrentTodoItem((prev) => ({ ...prev, time: time }));
+  };
+
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const newItem: CreateItem = currentTodoItem;
 
-    onSubmit(newItem);
+    onSubmit(currentTodoItem);
 
-    setCurrentTodoItem({
-      title: "",
-      subtitle: "",
-      descriptions: [""],
-      status: "progress",
-      priority: "high",
-      time: 3,
-    });
+    resetForm();
     onClose();
     // window.location.reload();
   }
@@ -117,7 +133,7 @@ const AddItemForm = ({ onClose, onSubmit, initialData }: AddItemFormProps) => {
             color={colorByTime}
           >
             {currentTodoItem.descriptions.map((description, index) => (
-              <div className="flex gap-2 w-full">
+              <div className="flex gap-2 w-full" key={index}>
                 <p className="text-xl">•</p>
                 <input
                   id={description}
@@ -139,26 +155,17 @@ const AddItemForm = ({ onClose, onSubmit, initialData }: AddItemFormProps) => {
               <TimelineButton
                 color="emerald"
                 type="button"
-                onClick={() => {
-                  setColorByTime("emerald");
-                  setCurrentTodoItem((prev) => ({ ...prev, time: 1 }));
-                }}
+                onClick={() => handleTimeSelection("emerald", 1)}
               />
               <TimelineButton
                 color="sky"
                 type="button"
-                onClick={() => {
-                  setColorByTime("sky");
-                  setCurrentTodoItem((prev) => ({ ...prev, time: 2 }));
-                }}
+                onClick={() => handleTimeSelection("sky", 2)}
               />
               <TimelineButton
                 color="orange"
                 type="button"
-                onClick={() => {
-                  setColorByTime("orange");
-                  setCurrentTodoItem((prev) => ({ ...prev, time: 3 }));
-                }}
+                onClick={() => handleTimeSelection("orange", 3)}
               />
             </div>
           </div>

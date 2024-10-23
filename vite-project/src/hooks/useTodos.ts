@@ -20,8 +20,16 @@ function useTodos() {
   const [todoToEdit, setTodoToEdit] = useState<GetItem | null>(null);
   const [todoToDelete, setTodoToDelete] = useState<number | null>(null);
 
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
-    fetchTodos();
+    async function loadTodos() {
+      setIsLoading(true);
+      await fetchTodos();
+      setIsLoading(false);
+    }
+
+    loadTodos();
   }, []);
 
   async function fetchTodos() {
@@ -220,6 +228,7 @@ function useTodos() {
   }
 
   return {
+    isLoading,
     pastData,
     mainData,
     futureData,
@@ -232,6 +241,7 @@ function useTodos() {
     confirmDelete,
     todoToEdit,
     todoToDelete,
+    setTodoToEdit,
   };
 }
 
