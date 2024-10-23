@@ -40,7 +40,7 @@ export default function Navbar({
                 className={`text-lg font-bold
                     ${
                       selectedNavLink === navLink.name
-                        ? "text-teal-500"
+                        ? "text-teal-500 tracking-wide"
                         : "text-zinc-700"
                     }
                   `}
