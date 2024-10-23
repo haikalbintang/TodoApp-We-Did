@@ -33,12 +33,16 @@ export default function Navbar({
           </div>
           <div className="-z-10 absolute -rotate-[36deg] -top-6 w-12 h-12 ml-2 bg-teal-200 rounded-lg"></div>
         </div>
-        <ul className="flex gap-11 w-4/5 items-center justify-center">
+        <ul className="flex gap-10 w-4/5 items-center justify-center">
           {navLinks.map((navLink) => (
             <li key={navLink.name}>
               <button
-                className={`text-xl
-                    ${selectedNavLink === navLink.name ? "text-teal-500" : ""}
+                className={`text-lg font-bold
+                    ${
+                      selectedNavLink === navLink.name
+                        ? "text-teal-500"
+                        : "text-zinc-700"
+                    }
                   `}
                 onClick={() => setSelectedNavLink(navLink.name)}
               >

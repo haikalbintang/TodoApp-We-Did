@@ -3,17 +3,19 @@ import { useNavigate } from "react-router-dom";
 export default function LandingPage() {
   const navigate = useNavigate();
   return (
-    <main className="h-screen w-screen flex flex-col justify-center items-center gap-6 ">
-      <div className="h-4/5"></div>
-      <div className="relative flex flex-col h-full w-full justify-center items-center">
-        <div className="absolute -rotate-[16deg] -top-6 w-28 ml-2 bg-zinc-300 rounded-lg">
-          <img
-            className="transform rotate-[16deg] p-1"
-            src="/check-icon-big.png"
-            alt="check icon"
-          />
+    <main className="relative h-screen w-screen flex flex-col justify-center items-center gap-6 ">
+      <div className="h-2/5"></div>
+      <div className="flex flex-col h-full w-full justify-center items-center gap-8">
+        <div className="relative">
+          <div className="-rotate-[16deg] -top-6 w-28 ml-2 bg-zinc-300 rounded-lg">
+            <img
+              className="transform rotate-[16deg] p-1"
+              src="/check-icon-big.png"
+              alt="check icon"
+            />
+          </div>
+          <div className="-z-10 absolute -rotate-[36deg] top-0 w-28 h-28 ml-2 bg-teal-200 rounded-lg"></div>
         </div>
-        <div className="-z-10 absolute -rotate-[36deg] -top-6 w-28 h-28 ml-2 bg-teal-200 rounded-lg"></div>
         <h1 className="text-5xl font-bold text-teal-600 items-center">
           TodoApp
         </h1>

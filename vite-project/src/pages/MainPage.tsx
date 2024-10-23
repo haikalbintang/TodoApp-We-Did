@@ -77,7 +77,7 @@ function MainPage() {
 
   function handleLogout() {
     localStorage.removeItem("authToken");
-    navigate("/login");
+    navigate("/");
   }
 
   return (
