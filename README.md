@@ -1,44 +1,88 @@
-# TodoApp
+# TodoApp - We Did ✨
 
-## Prerequisites
+## Table of Contents
 
-Ensure you have the following installed:
+- [Introduction](#introduction)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Authentication](#authentication)
+- [License](#license)
 
-- [Node.js](https://nodejs.org/) (v14 or higher recommended)
-- [npm](https://www.npmjs.com/)
+## Introduction
 
-## Getting Started
+TodoApp - We Did is a collaborative to-do list application that helps users manage tasks efficiently. This project is designed with a mobile-first approach, focusing on user-friendly task management with real-time synchronization using Supabase.
 
-Follow these steps to set up and run the project locally:
+## Features
 
-### 1. Clone the repository
+- ✅ Add, edit, and delete tasks
+- 🗂️ Organize tasks into categories
+- 📱 Mobile-first design for a seamless experience on smartphones
+- 🔑 User authentication with Supabase
+- 📊 Real-time task updates
+- 💡 Responsive and intuitive UI
 
-\`\`\`bash
-git clone <repository-url>
-\`\`\`
+## Tech Stack
 
-### 2. Navigate to the project directory
+- **Frontend:**
+  - React
+  - Vite
+  - TailwindCSS
+- **Backend:**
+  - Supabase (for backend and authentication)
 
-\`\`\`bash
-cd vite-project
-\`\`\`
+## Installation
 
-### 3. Install dependencies
+To get started with the project, follow the instructions below:
 
-Ensure you're in the project folder, then run:
+1. Clone the repository:
 
-\`\`\`bash
-npm install
-\`\`\`
+   ```bash
+   git clone https://github.com/haikalbintang/TodoApp-We-Did.git
+   ```
 
-### 4. Run the development server
+2. Navigate to the project directory:
 
-Start the local development server with:
+   ```bash
+   cd TodoApp-We-Did
+   ```
 
-\`\`\`bash
-npm run dev
-\`\`\`
+3. Install the dependencies:
 
-### 5. Access the app
+   ```bash
+   npm install
+   ```
 
-Open your browser and navigate to \`http://localhost:5173\`.
+4. Create a `.env` file in the root directory and add your Supabase project credentials:
+
+   ```
+   VITE_SUPABASE_URL=your-supabase-url
+   VITE_SUPABASE_KEY=your-supabase-anon-key
+   ```
+
+5. Run the development server:
+
+   ```bash
+   npm run dev
+   ```
+
+## Usage
+
+Once the app is running, you can:
+
+1. Sign up or log in using the provided Supabase authentication system.
+2. Add new tasks and manage your to-do lists in real-time.
+3. View and update tasks on your mobile device.
+
+## Authentication
+
+This project uses [Supabase](https://supabase.com/) for user authentication. Ensure that you have a Supabase account and the necessary credentials to enable login functionality.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
+
+---
+
+Happy coding! 😊
