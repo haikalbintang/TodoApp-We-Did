@@ -17,7 +17,7 @@ export default function Navbar({
   return (
     <div className="w-full shadow-xl">
       <nav className="mx-auto w-full h-16 max-w-[1366px] flex items-center justify-between p-5">
-        <div className="relative flex w-1/5">
+        <div className="relative flex w-1/4">
           <h1 className="hidden pb-2 ml-4 text-4xl font-bold text-teal-600 items-center">
             TodoApp
           </h1>
@@ -33,15 +33,15 @@ export default function Navbar({
           </div>
           <div className="-z-10 absolute -rotate-[36deg] -top-6 w-12 h-12 ml-2 bg-teal-200 rounded-lg"></div>
         </div>
-        <ul className="flex gap-10 w-4/5 items-center justify-center">
+        <ul className="flex gap-10 w-3/4 items-center justify-center">
           {navLinks.map((navLink) => (
-            <li key={navLink.name}>
+            <li key={navLink.name} className={`w-1/3 ${navLink.textAlign}`}>
               <button
                 className={`text-lg font-bold
                     ${
                       selectedNavLink === navLink.name
-                        ? "text-teal-500 tracking-wide"
-                        : "text-zinc-700"
+                        ? "text-teal-500 tracking-wider"
+                        : "text-zinc-700 tracking-wide"
                     }
                   `}
                 onClick={() => setSelectedNavLink(navLink.name)}
