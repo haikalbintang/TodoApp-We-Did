@@ -64,33 +64,8 @@ export async function getFutureTodos() {
   return data;
 }
 
-// export async function createTodo(newTodo: CreateItem) {
-//   const {
-//     data: { session },
-//   } = await supabase.auth.getSession();
-
-//   if (session) {
-//     const user = session.user;
-
-//     const { data, error } = await supabase
-//       .from("todos")
-//       .insert({ ...newTodo, user_id: user.id })
-//       .select();
-
-//     if (error) {
-//       console.error(error);
-//       throw new Error("Todo item could not be created");
-//     } else {
-//       console.log("Todo created:", data);
-//       return data;
-//     }
-//   }
-// }
-
 export async function deleteTodo(id: number) {
-  const response = await supabase.from("todos").delete().eq("id", id);
-
-  console.log(response);
+  await supabase.from("todos").delete().eq("id", id);
 }
 
 export async function updateTodo(
@@ -111,10 +86,13 @@ export async function updateTodo(
   return data[0];
 }
 
-export async function updateTodoToPast(id: number): Promise<GetItem> {
+export async function updateTodoToPast(
+  id: number,
+  order: number
+): Promise<GetItem> {
   const { data, error } = await supabase
     .from("todos")
-    .update({ time: 1 })
+    .update({ time: 1, order: order })
     .eq("id", id)
     .select();
 
@@ -126,10 +104,13 @@ export async function updateTodoToPast(id: number): Promise<GetItem> {
   return data[0];
 }
 
-export async function updateTodoToPresent(id: number): Promise<GetItem> {
+export async function updateTodoToPresent(
+  id: number,
+  order: number
+): Promise<GetItem> {
   const { data, error } = await supabase
     .from("todos")
-    .update({ time: 2 })
+    .update({ time: 2, order: order })
     .eq("id", id)
     .select();
 
@@ -141,10 +122,13 @@ export async function updateTodoToPresent(id: number): Promise<GetItem> {
   return data[0];
 }
 
-export async function updateTodoToFuture(id: number): Promise<GetItem> {
+export async function updateTodoToFuture(
+  id: number,
+  order: number
+): Promise<GetItem> {
   const { data, error } = await supabase
     .from("todos")
-    .update({ time: 3 })
+    .update({ time: 3, order: order })
     .eq("id", id)
     .select();
 
@@ -156,16 +140,16 @@ export async function updateTodoToFuture(id: number): Promise<GetItem> {
   return data[0];
 }
 
-export async function updateItemPosition(id: number, newStatus: string) {
-  try {
-    if (newStatus === "past") {
-      await updateTodoToPast(id);
-    } else if (newStatus === "present") {
-      await updateTodoToPresent(id);
-    } else if (newStatus === "future") {
-      await updateTodoToFuture(id);
-    }
-  } catch (error) {
-    console.error("Failed to update item position:", error);
-  }
-}
+// export async function updateItemPosition(id: number, newStatus: string) {
+//   try {
+//     if (newStatus === "past") {
+//       await updateTodoToPast(id);
+//     } else if (newStatus === "present") {
+//       await updateTodoToPresent(id);
+//     } else if (newStatus === "future") {
+//       await updateTodoToFuture(id);
+//     }
+//   } catch (error) {
+//     console.error("Failed to update item position:", error);
+//   }
+// }

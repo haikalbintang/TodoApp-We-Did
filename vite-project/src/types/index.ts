@@ -1,11 +1,12 @@
 export interface GetItem {
-  id: number,
+  id: number;
   title: string;
   subtitle: string;
   descriptions: string[];
   status: string;
   priority: string;
-  time: number
+  time: number;
+  order: number;
 }
 
 export interface CreateItem {
@@ -14,21 +15,31 @@ export interface CreateItem {
   descriptions: string[];
   status: string;
   priority: string;
-  time: number
+  time: number;
+}
+
+export interface CreateItemAutoOrder {
+  title: string;
+  subtitle: string;
+  descriptions: string[];
+  status: string;
+  priority: string;
+  time: number;
+  order: number;
 }
 
 export interface LoginCredentials {
-  email: string,
-  password: string
+  email: string;
+  password: string;
 }
 
 export interface SignUpCredentials {
-  nickname: string
-  username: string,
-  email: string,
-  password: string
+  nickname: string;
+  username: string;
+  email: string;
+  password: string;
 }
 
 export interface Profile {
-  nickname: string
+  nickname: string;
 }

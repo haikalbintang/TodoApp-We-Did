@@ -53,13 +53,24 @@ export default function TodoItem({
       selectedBgColor={selectedBgColor}
       data={data}
     >
-      <div className="flex justify-between" onClick={() => setDescIsShown((prev) => !prev)}>
-        <DisplayTodoItem index={index} data={data} />
+      <div
+        className="flex justify-between"
+        onClick={() => setDescIsShown((prev) => !prev)}
+      >
+        <DisplayTodoItem data={data} />
 
         <div className="flex gap-2 items-start mt-1">
-          <TimelineButton color="emerald" onClick={handleToPast} />
-          <TimelineButton color="sky" onClick={handleToPresent} />
-          <TimelineButton color="orange" onClick={handleToFuture} />
+          <TimelineButton
+            type="button"
+            color="emerald"
+            onClick={handleToPast}
+          />
+          <TimelineButton type="button" color="sky" onClick={handleToPresent} />
+          <TimelineButton
+            type="button"
+            color="orange"
+            onClick={handleToFuture}
+          />
         </div>
       </div>
       {descIsShown && (

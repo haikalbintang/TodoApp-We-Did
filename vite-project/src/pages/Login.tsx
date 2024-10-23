@@ -50,10 +50,9 @@ const Login = () => {
     const { error, data } = await userLogin(currentLogin);
 
     if (error) {
-      console.log(error);
+      console.error(error);
       setErrorMessage((prev) => ({ ...prev, submit: "Invalid Credential" }));
     } else if (data) {
-      console.log(data);
       navigate("/main");
     }
   }
@@ -69,6 +68,7 @@ const Login = () => {
               name="emal"
               value={currentLogin["email"]}
               type="email"
+              color="teal"
               onBlur={() => handleBlurEmail(currentLogin.email)}
               onChange={(e) =>
                 setCurrentLogin((prev) => ({
@@ -78,7 +78,7 @@ const Login = () => {
               }
             >
               {errorMessage.email && (
-                <p className="text-fuchsia-600 text-sm ml-1">
+                <p className="text-teal-700 text-sm ml-1">
                   {errorMessage.email}
                 </p>
               )}
@@ -88,6 +88,7 @@ const Login = () => {
               name="password"
               value={currentLogin["password"]}
               type="password"
+              color="teal"
               onChange={(e) =>
                 setCurrentLogin((prev) => ({
                   ...prev,
@@ -103,7 +104,7 @@ const Login = () => {
 
           <div className="flex items-center justify-end">
             <button
-              className="ring py-2 px-4 bg-sky-300 rounded-lg font-bold text-zinc-800 hover:bg-sky-200"
+              className="ring py-2 px-4 bg-teal-300 rounded-lg font-bold text-zinc-800 hover:bg-teal-200"
               type="submit"
             >
               Login

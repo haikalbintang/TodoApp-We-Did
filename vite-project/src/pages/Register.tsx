@@ -117,6 +117,7 @@ const Register = () => {
               name="nickname"
               value={currentSignUp["nickname"]}
               type="text"
+              color="fuchsia"
               onBlur={handleBlurNickname}
               onChange={(e) =>
                 setCurrentSignUp((prev) => ({
@@ -136,6 +137,7 @@ const Register = () => {
               name="username"
               value={currentSignUp["username"]}
               type="text"
+              color="fuchsia"
               onBlur={handleBlurUsername}
               onChange={(e) =>
                 setCurrentSignUp((prev) => ({
@@ -145,7 +147,7 @@ const Register = () => {
               }
             >
               {errorMessage.username && (
-                <p className="text-fuchsia-600 text-sm ml-1">
+                <p className="text-teal-600 text-sm ml-1">
                   {errorMessage.username}
                 </p>
               )}
@@ -156,6 +158,7 @@ const Register = () => {
               name="emal"
               value={currentSignUp["email"]}
               type="email"
+              color="fuchsia"
               onBlur={() => handleBlurEmail(currentSignUp.email)}
               onChange={(e) =>
                 setCurrentSignUp((prev) => ({
@@ -175,6 +178,7 @@ const Register = () => {
               name="password"
               value={currentSignUp["password"]}
               type="password"
+              color="fuchsia"
               onBlur={handleBlurPassword}
               onChange={(e) =>
                 setCurrentSignUp((prev) => ({
@@ -197,9 +201,9 @@ const Register = () => {
             </p>
           )}
 
-          <div className="flex items-center justify-end">
+          <div className="flex py-2 items-center justify-end">
             <button
-              className="ring py-2 px-4 bg-sky-300 rounded-lg font-bold text-zinc-800 hover:bg-sky-200"
+              className="ring py-2 px-4 bg-fuchsia-300 rounded-lg font-bold text-zinc-800 hover:bg-fuchsia-200"
               type="submit"
             >
               Sign Up

@@ -7,6 +7,8 @@ import Modal from "../layouts/Modal";
 import SubmitBtn from "./SubmitBtn";
 import AddDescBtn from "./AddDescBtn";
 import Form from "../layouts/Form";
+import TimelineButton from "./TimelineButton";
+import InputTextDesc from "./InputTextDesc";
 
 interface AddItemFormProps {
   onClose: () => void;
@@ -21,12 +23,22 @@ const AddItemForm = ({ onClose, onSubmit, initialData }: AddItemFormProps) => {
     descriptions: [""],
     status: "progress",
     priority: "high",
-    time: 2,
+    time: 3,
   });
+  const [colorByTime, setColorByTime] = useState("sky");
 
   useEffect(() => {
     if (initialData) {
       setCurrentTodoItem(initialData);
+    } else {
+      setCurrentTodoItem({
+        title: "",
+        subtitle: "",
+        descriptions: [""],
+        status: "progress",
+        priority: "high",
+        time: 2,
+      });
     }
   }, [initialData]);
 
@@ -49,7 +61,6 @@ const AddItemForm = ({ onClose, onSubmit, initialData }: AddItemFormProps) => {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     const newItem: CreateItem = currentTodoItem;
-    console.log(newItem);
 
     onSubmit(newItem);
 
@@ -59,7 +70,7 @@ const AddItemForm = ({ onClose, onSubmit, initialData }: AddItemFormProps) => {
       descriptions: [""],
       status: "progress",
       priority: "high",
-      time: 2,
+      time: 3,
     });
     onClose();
     // window.location.reload();
@@ -75,6 +86,7 @@ const AddItemForm = ({ onClose, onSubmit, initialData }: AddItemFormProps) => {
             name="title"
             value={currentTodoItem["title"]}
             type="text"
+            color={colorByTime}
             onChange={(e) =>
               setCurrentTodoItem((prev) => ({
                 ...prev,
@@ -87,6 +99,7 @@ const AddItemForm = ({ onClose, onSubmit, initialData }: AddItemFormProps) => {
             name="subtitle"
             value={currentTodoItem["subtitle"]}
             type="text"
+            color={colorByTime}
             onChange={(e) =>
               setCurrentTodoItem((prev) => ({
                 ...prev,
@@ -94,17 +107,61 @@ const AddItemForm = ({ onClose, onSubmit, initialData }: AddItemFormProps) => {
               }))
             }
           />
-          {currentTodoItem.descriptions.map((description, index) => (
-            <InputText
-              key={index}
-              label={`Desc ${index + 1}:`}
-              name={`description-${index}`}
-              value={description}
-              type="text"
-              onChange={(e) => handleDescriptionChange(index, e.target.value)}
-            />
-          ))}
-          <AddDescBtn onAddDescription={addDescription} />
+          <InputTextDesc
+            label={
+              currentTodoItem.descriptions.length > 1
+                ? `Descriptions`
+                : "Description"
+            }
+            name={`description`}
+            color={colorByTime}
+          >
+            {currentTodoItem.descriptions.map((description, index) => (
+              <div className="flex gap-2 w-full">
+                <p className="text-xl">•</p>
+                <input
+                  id={description}
+                  name={`description-${index}`}
+                  type="text"
+                  value={description}
+                  onChange={(e) =>
+                    handleDescriptionChange(index, e.target.value)
+                  }
+                  className="text-sm ring border-2 border-zinc-800 py-1 px-2 rounded-lg w-full flex flex-wrap"
+                />
+              </div>
+            ))}
+          </InputTextDesc>
+
+          <div className="flex items-center justify-between">
+            <AddDescBtn onAddDescription={addDescription} color={colorByTime} />
+            <div className="flex gap-2 pr-4 pb-3">
+              <TimelineButton
+                color="emerald"
+                type="button"
+                onClick={() => {
+                  setColorByTime("emerald");
+                  setCurrentTodoItem((prev) => ({ ...prev, time: 1 }));
+                }}
+              />
+              <TimelineButton
+                color="sky"
+                type="button"
+                onClick={() => {
+                  setColorByTime("sky");
+                  setCurrentTodoItem((prev) => ({ ...prev, time: 2 }));
+                }}
+              />
+              <TimelineButton
+                color="orange"
+                type="button"
+                onClick={() => {
+                  setColorByTime("orange");
+                  setCurrentTodoItem((prev) => ({ ...prev, time: 3 }));
+                }}
+              />
+            </div>
+          </div>
 
           <SubmitBtn />
         </Form>

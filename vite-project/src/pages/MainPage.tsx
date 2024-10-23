@@ -28,7 +28,7 @@ function MainPage() {
     todoToEdit,
   } = useTodos();
   const [profile, setProfile] = useState<Profile>({ nickname: "" });
-  const [selectedNavLink, setSelectedNavLink] = useState("present");
+  const [selectedNavLink, setSelectedNavLink] = useState("today");
   const [formIsShown, setFormIsShown] = useState(false);
   const [deleteIsShown, setDeleteIsShown] = useState(false);
   const navigate = useNavigate();
@@ -103,11 +103,11 @@ function MainPage() {
         </Navbar>
         <div className="mx-auto max-w-[1366px] px-4 pb-24">
           <Main>
-            {selectedNavLink === "past" && (
+            {selectedNavLink === "daily" && (
               <List
                 key={0}
-                title={"Daily Habit"}
-                onClick={() => setSelectedNavLink("past")}
+                title={"Daily Habits"}
+                onClick={() => setSelectedNavLink("daily")}
                 data={pastData}
                 bgColor="bg-emerald-300"
                 selectedBgColor="bg-emerald-200"
@@ -119,12 +119,12 @@ function MainPage() {
               />
             )}
 
-            {selectedNavLink === "present" && (
+            {selectedNavLink === "today" && (
               <>
                 <List
                   key={1}
                   title={"Today"}
-                  onClick={() => setSelectedNavLink("present")}
+                  onClick={() => setSelectedNavLink("today")}
                   data={mainData}
                   bgColor="bg-sky-300"
                   selectedBgColor="bg-sky-200"
@@ -137,11 +137,11 @@ function MainPage() {
               </>
             )}
 
-            {selectedNavLink === "future" && (
+            {selectedNavLink === "later" && (
               <List
                 key={2}
                 title={"Todo List"}
-                onClick={() => setSelectedNavLink("future")}
+                onClick={() => setSelectedNavLink("later")}
                 data={futureData}
                 bgColor="bg-orange-300"
                 selectedBgColor="bg-orange-200"

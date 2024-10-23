@@ -1,26 +1,18 @@
 import { ReactNode } from "react";
 
-interface InputTextProps {
+interface InputTextDescProps {
   label: string;
   name: string;
-  value: string;
-  type: string;
   color: string;
-  children?: ReactNode;
-  onBlur?: () => void;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  children: ReactNode;
 }
 
-const InputText = ({
+const InputTextDesc = ({
   label,
   name,
-  value,
-  type,
   color,
   children,
-  onBlur,
-  onChange,
-}: InputTextProps) => {
+}: InputTextDescProps) => {
   return (
     <div className={`flex flex-col gap-2 p-3 bg-${color}-200 my-3 rounded-lg`}>
       <label
@@ -29,7 +21,7 @@ const InputText = ({
       >
         {label}
       </label>
-      <input
+      {/* <input
         id={name}
         name={name}
         type={type}
@@ -37,10 +29,10 @@ const InputText = ({
         onChange={onChange}
         onBlur={onBlur}
         className="text-sm ring border-2 border-zinc-800 py-1 px-2 rounded-lg max-w-80 flex flex-wrap"
-      />
+      /> */}
       {children}
     </div>
   );
 };
 
-export default InputText;
+export default InputTextDesc;
