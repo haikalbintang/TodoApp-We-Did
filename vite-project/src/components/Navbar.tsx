@@ -37,11 +37,11 @@ export default function Navbar({
           {navLinks.map((navLink) => (
             <li key={navLink.name} className={`w-1/3 ${navLink.textAlign}`}>
               <button
-                className={`text-lg font-bold
+                className={`text-lg font-bold tracking-wider
                     ${
                       selectedNavLink === navLink.name
-                        ? "text-teal-500 tracking-wider"
-                        : "text-zinc-700 tracking-wide"
+                        ? "text-teal-500"
+                        : "text-zinc-700"
                     }
                   `}
                 onClick={() => setSelectedNavLink(navLink.name)}
