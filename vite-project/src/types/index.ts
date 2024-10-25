@@ -42,4 +42,5 @@ export interface SignUpCredentials {
 
 export interface Profile {
   nickname: string;
+  username: string;
 }
