@@ -134,7 +134,7 @@ function MainPage() {
           </div>
         ) : selectedNavLink === "home" ? (
           <main className="p-10">
-            <h1 className="font-bold text-wrap text-5xl mb-10">
+            <h1 className="font-bold text-wrap text-5xl mt-4 mb-10">
               <span className="text-teal-600">Welcome</span>
               <span className="text-zinc-800">, {profile.nickname}!</span>
             </h1>
@@ -178,7 +178,7 @@ function MainPage() {
               To add a new task, click the feather button. You can edit and
               delete any task by clicking the icons.
             </h2>
-            <h2 className="text-zinc-800 mb-4">
+            <h2 className="text-zinc-800 mb-6">
               You can move tasks between lists by clicking the right-colored
               bullet.
             </h2>
