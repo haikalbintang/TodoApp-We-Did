@@ -13,6 +13,7 @@ import { GetItem, Profile } from "../types";
 import { useNavigate } from "react-router-dom";
 import supabase from "../services/supabase";
 import TimelineButton from "../components/TimelineButton";
+import { userLogout } from "../services/apiUsers";
 
 function MainPage() {
   const {
@@ -102,7 +103,7 @@ function MainPage() {
   }
 
   function handleLogout() {
-    localStorage.removeItem("authToken");
+    userLogout();
     navigate("/");
   }
 

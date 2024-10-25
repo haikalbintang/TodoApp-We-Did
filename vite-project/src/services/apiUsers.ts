@@ -44,6 +44,18 @@ export async function userLogin(LoginCredentials: LoginCredentials) {
   }
 }
 
+export async function userLogout() {
+  const { error } = await supabase.auth.signOut();
+
+  if (error) {
+    console.error("Logout failed:", error.message);
+    return { error };
+  } else {
+    localStorage.removeItem("userId");
+    return { success: true };
+  }
+}
+
 export async function resetPassword(email: string) {
   const { data, error } = await supabase.auth.resetPasswordForEmail(email);
   if (error) {
