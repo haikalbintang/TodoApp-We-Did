@@ -134,7 +134,7 @@ function MainPage() {
             <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-zinc-800"></div>
           </div>
         ) : selectedNavLink === "home" ? (
-          <main className="p-10">
+          <main className="p-10 mx-auto max-w-[1366px] px-4">
             <h1 className="font-bold text-wrap text-5xl mt-4 mb-10">
               <span className="text-teal-600">Welcome</span>
               <span className="text-zinc-800">, {profile.nickname}!</span>

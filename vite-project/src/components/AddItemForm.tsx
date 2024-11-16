@@ -25,7 +25,7 @@ const getColorByTime = (time: number): string => {
     case 3:
       return "orange";
     default:
-      return "orange"; // Default color if no match
+      return "sky"; // Default color if no match
   }
 };
 
@@ -36,9 +36,9 @@ const AddItemForm = ({ onClose, onSubmit, initialData }: AddItemFormProps) => {
     descriptions: [""],
     status: "progress",
     priority: "high",
-    time: 3,
+    time: 2,
   });
-  const [colorByTime, setColorByTime] = useState("orange");
+  const [colorByTime, setColorByTime] = useState("sky");
 
   const resetForm = () => {
     setCurrentTodoItem({
@@ -47,9 +47,9 @@ const AddItemForm = ({ onClose, onSubmit, initialData }: AddItemFormProps) => {
       descriptions: [""],
       status: "progress",
       priority: "high",
-      time: 3,
+      time: 2,
     });
-    setColorByTime("orange");
+    setColorByTime("sky");
   };
 
   useEffect(() => {
@@ -97,80 +97,101 @@ const AddItemForm = ({ onClose, onSubmit, initialData }: AddItemFormProps) => {
       <Modal>
         <Header2 title="New Todo" />
         <Form onSubmit={handleSubmit}>
-          <InputText
-            label="Title:"
-            name="title"
-            value={currentTodoItem["title"]}
-            type="text"
-            color={colorByTime}
-            onChange={(e) =>
-              setCurrentTodoItem((prev) => ({
-                ...prev,
-                title: e.target.value,
-              }))
-            }
-          />
-          <InputText
-            label="Subtitle:"
-            name="subtitle"
-            value={currentTodoItem["subtitle"]}
-            type="text"
-            color={colorByTime}
-            onChange={(e) =>
-              setCurrentTodoItem((prev) => ({
-                ...prev,
-                subtitle: e.target.value,
-              }))
-            }
-          />
-          <InputTextDesc
-            label={
-              currentTodoItem.descriptions.length > 1
-                ? `Descriptions`
-                : "Description"
-            }
-            name={`description`}
-            color={colorByTime}
-          >
-            {currentTodoItem.descriptions.map((description, index) => (
-              <div className="flex gap-2 w-full" key={index}>
-                <p className="text-xl">•</p>
-                <input
-                  id={description}
-                  name={`description-${index}`}
-                  type="text"
-                  value={description}
-                  onChange={(e) =>
-                    handleDescriptionChange(index, e.target.value)
-                  }
-                  className="text-sm ring border-2 border-zinc-800 py-1 px-2 rounded-lg w-full flex flex-wrap"
-                />
+          <div className="w-2/5">
+            <InputText
+              label="Title:"
+              name="title"
+              value={currentTodoItem["title"]}
+              type="text"
+              color={colorByTime}
+              onChange={(e) =>
+                setCurrentTodoItem((prev) => ({
+                  ...prev,
+                  title: e.target.value,
+                }))
+              }
+            />
+            <InputText
+              label="Subtitle:"
+              name="subtitle"
+              value={currentTodoItem["subtitle"]}
+              type="text"
+              color={colorByTime}
+              onChange={(e) =>
+                setCurrentTodoItem((prev) => ({
+                  ...prev,
+                  subtitle: e.target.value,
+                }))
+              }
+            />
+            <div className="flex gap-2 pb-3 xl:pb-0">
+              <div className="w-1/3 flex items-center justify-center">
+                <TimelineButton
+                  color="emerald"
+                  type="button"
+                  onClick={() => handleTimeSelection("emerald", 1)}
+                >
+                  <span className="pl-1">daily</span>
+                </TimelineButton>
               </div>
-            ))}
-          </InputTextDesc>
-
-          <div className="flex items-center justify-between">
-            <AddDescBtn onAddDescription={addDescription} color={colorByTime} />
-            <div className="flex gap-2 pr-4 pb-3">
-              <TimelineButton
-                color="emerald"
-                type="button"
-                onClick={() => handleTimeSelection("emerald", 1)}
-              />
-              <TimelineButton
-                color="sky"
-                type="button"
-                onClick={() => handleTimeSelection("sky", 2)}
-              />
-              <TimelineButton
-                color="orange"
-                type="button"
-                onClick={() => handleTimeSelection("orange", 3)}
-              />
+              <div className="w-1/3 flex items-center justify-center">
+                <TimelineButton
+                  color="sky"
+                  type="button"
+                  onClick={() => handleTimeSelection("sky", 2)}
+                >
+                  <span className="pl-1">today</span>
+                </TimelineButton>
+              </div>
+              <div className="w-1/3 flex items-center justify-center">
+                <TimelineButton
+                  color="orange"
+                  type="button"
+                  onClick={() => handleTimeSelection("orange", 3)}
+                >
+                  <span className="pl-1">later</span>
+                </TimelineButton>
+              </div>
             </div>
           </div>
+          <div className="w-3/5 flex flex-col justify-between">
+            <div>
+              <InputTextDesc
+                label={
+                  currentTodoItem.descriptions.length > 1
+                    ? `Descriptions`
+                    : "Description"
+                }
+                name={`description`}
+                color={colorByTime}
+              >
+                {currentTodoItem.descriptions.map((description, index) => (
+                  <div className="flex gap-2 w-full" key={index}>
+                    <p className="text-xl">•</p>
+                    <input
+                      id={description}
+                      name={`description-${index}`}
+                      type="text"
+                      value={description}
+                      onChange={(e) =>
+                        handleDescriptionChange(index, e.target.value)
+                      }
+                      className="text-sm ring border-2 border-zinc-800 py-1 px-2 rounded-lg w-full flex flex-wrap"
+                    />
+                  </div>
+                ))}
+              </InputTextDesc>
 
-          <SubmitBtn />
+              <div className="flex items-center justify-between">
+                <AddDescBtn
+                  onAddDescription={addDescription}
+                  color={colorByTime}
+                />
+              </div>
+            </div>
+
+            <SubmitBtn />
+          </div>
         </Form>
       </Modal>
     </Overlay>

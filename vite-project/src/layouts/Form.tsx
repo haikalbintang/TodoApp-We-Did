@@ -7,7 +7,7 @@ interface FormProps {
 
 const Form = ({ onSubmit, children }: FormProps) => {
   return (
-    <form onSubmit={onSubmit} action="">
+    <form className="xl:flex xl:w-full xl:gap-4" onSubmit={onSubmit} action="">
       {children}
     </form>
   );
