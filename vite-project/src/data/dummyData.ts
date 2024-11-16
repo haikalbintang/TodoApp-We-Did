@@ -6,9 +6,9 @@ const status = {
 };
 
 export const navLinks = [
-  { name: "daily", textAlign: "text-right" },
-  { name: "today", textAlign: "text-center" },
-  { name: "later", textAlign: "text-left" },
+  { name: "daily", textAlign: "text-right", textAlignXL: "text-center" },
+  { name: "today", textAlign: "text-center", textAlignXL: "text-center" },
+  { name: "later", textAlign: "text-left", textAlignXL: "text-center" },
 ];
 
 export const mainDataSeed = [
