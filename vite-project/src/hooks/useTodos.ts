@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { CreateItem, GetItem } from "../types";
 import {
   deleteTodo,
+  getBacklogTodos,
+  getDoneTodos,
   getFutureTodos,
   getPastTodos,
   getPresentTodos,
@@ -13,9 +15,11 @@ import {
 import { createTodo } from "../services/apiCreateTodo";
 
 function useTodos() {
+  const [backlog, setBacklog] = useState<GetItem[]>([]);
   const [pastData, setPastData] = useState<GetItem[]>([]);
   const [mainData, setMainData] = useState<GetItem[]>([]);
   const [futureData, setFutureData] = useState<GetItem[]>([]);
+  const [done, setDone] = useState<GetItem[]>([]);
 
   const [todoToEdit, setTodoToEdit] = useState<GetItem | null>(null);
   const [todoToDelete, setTodoToDelete] = useState<number | null>(null);
@@ -33,12 +37,21 @@ function useTodos() {
   }, []);
 
   async function fetchTodos() {
-    const pastData = await getPastTodos();
-    const mainData = await getPresentTodos();
-    const futureData = await getFutureTodos();
-    setPastData(pastData.sort((a, b) => a.order - b.order));
-    setMainData(mainData.sort((a, b) => a.order - b.order));
-    setFutureData(futureData.sort((a, b) => a.order - b.order));
+    try {
+      const pastData = await getPastTodos();
+      const mainData = await getPresentTodos();
+      const futureData = await getFutureTodos();
+      const backlogData = await getBacklogTodos();
+      const doneData = await getDoneTodos();
+
+      setPastData(pastData.sort((a, b) => a.order - b.order));
+      setMainData(mainData.sort((a, b) => a.order - b.order));
+      setFutureData(futureData.sort((a, b) => a.order - b.order));
+      setBacklog(backlogData.sort((a, b) => a.order - b.order));
+      setDone(doneData.sort((a, b) => a.order - b.order));
+    } catch (error) {
+      console.error("Failed to fetch todos:", error);
+    }
   }
 
   function handleDeleteTodo(id: number) {
@@ -50,7 +63,9 @@ function useTodos() {
       if (todoToDelete !== null) {
         await deleteTodo(todoToDelete);
       }
-
+      setBacklog((prevData) =>
+        prevData.filter((todo) => todo.id !== todoToDelete)
+      );
       setPastData((prevData) =>
         prevData.filter((todo) => todo.id !== todoToDelete)
       );
@@ -58,6 +73,9 @@ function useTodos() {
         prevData.filter((todo) => todo.id !== todoToDelete)
       );
       setFutureData((prevData) =>
+        prevData.filter((todo) => todo.id !== todoToDelete)
+      );
+      setDone((prevData) =>
         prevData.filter((todo) => todo.id !== todoToDelete)
       );
     } catch (error) {
@@ -72,6 +90,11 @@ function useTodos() {
   async function handleAddTodo(newTodo: CreateItem) {
     if (todoToEdit) {
       const updatedTodo = await updateTodo(todoToEdit.id, newTodo);
+      setBacklog((prevData) =>
+        prevData.map((todo) =>
+          todo.id === updatedTodo.id ? updatedTodo : todo
+        )
+      );
       setPastData((prevData) =>
         prevData.map((todo) =>
           todo.id === updatedTodo.id ? updatedTodo : todo
@@ -87,9 +110,29 @@ function useTodos() {
           todo.id === updatedTodo.id ? updatedTodo : todo
         )
       );
+      setDone((prevData) =>
+        prevData.map((todo) =>
+          todo.id === updatedTodo.id ? updatedTodo : todo
+        )
+      );
       setTodoToEdit(null);
     } else
       switch (newTodo.time) {
+        case 0:
+          {
+            const maxOrder =
+              backlog.length > 0
+                ? Math.max(...backlog.map((todo) => todo.order))
+                : 0;
+            const createdTodo = await createTodo({
+              ...newTodo,
+              order: maxOrder + 1,
+            });
+            setBacklog((prevData) =>
+              [...prevData, createdTodo[0]].sort((a, b) => a.order - b.order)
+            );
+          }
+          break;
         case 1:
           {
             const maxOrder =
@@ -135,9 +178,53 @@ function useTodos() {
             );
           }
           break;
+        case 4:
+          {
+            const maxOrder =
+              done.length > 0 ? Math.max(...done.map((todo) => todo.order)) : 0;
+            const createdTodo = await createTodo({
+              ...newTodo,
+              order: maxOrder + 1,
+            });
+            setDone((prevData) =>
+              [...prevData, createdTodo[0]].sort((a, b) => a.order - b.order)
+            );
+          }
+          break;
         default:
           break;
       }
+  }
+
+  async function handleToBacklog(id: number) {
+    try {
+      const maxOrder =
+        backlog.length > 0 ? Math.max(...backlog.map((todo) => todo.order)) : 0;
+
+      await updateTodoToPast(id, maxOrder + 1);
+
+      const updatedTodo =
+        pastData.find((todo) => todo.id === id) ||
+        mainData.find((todo) => todo.id === id) ||
+        futureData.find((todo) => todo.id === id) ||
+        done.find((todo) => todo.id === id);
+
+      if (!updatedTodo) {
+        throw new Error("Todo item not found");
+      }
+
+      setDone((prevData) => prevData.filter((todo) => todo.id !== id));
+      setPastData((prevData) => prevData.filter((todo) => todo.id !== id));
+      setMainData((prevData) => prevData.filter((todo) => todo.id !== id));
+      setFutureData((prevData) => prevData.filter((todo) => todo.id !== id));
+      setBacklog((prevData) =>
+        [...prevData, { ...updatedTodo, order: maxOrder + 1 }].sort(
+          (a, b) => a.order - b.order
+        )
+      );
+    } catch (error) {
+      console.error("Failed to move todo", error);
+    }
   }
 
   async function handleToPast(id: number) {
@@ -151,12 +238,16 @@ function useTodos() {
 
       const updatedTodo =
         mainData.find((todo) => todo.id === id) ||
-        futureData.find((todo) => todo.id === id);
+        futureData.find((todo) => todo.id === id) ||
+        done.find((todo) => todo.id === id) ||
+        backlog.find((todo) => todo.id === id);
 
       if (!updatedTodo) {
         throw new Error("Todo item not found");
       }
 
+      setBacklog((prevData) => prevData.filter((todo) => todo.id !== id));
+      setDone((prevData) => prevData.filter((todo) => todo.id !== id));
       setMainData((prevData) => prevData.filter((todo) => todo.id !== id));
       setFutureData((prevData) => prevData.filter((todo) => todo.id !== id));
       setPastData((prevData) =>
@@ -180,12 +271,16 @@ function useTodos() {
 
       const updatedTodo =
         pastData.find((todo) => todo.id === id) ||
-        futureData.find((todo) => todo.id === id);
+        futureData.find((todo) => todo.id === id) ||
+        done.find((todo) => todo.id === id) ||
+        backlog.find((todo) => todo.id === id);
 
       if (!updatedTodo) {
         throw new Error("Todo item not found");
       }
 
+      setBacklog((prevData) => prevData.filter((todo) => todo.id !== id));
+      setDone((prevData) => prevData.filter((todo) => todo.id !== id));
       setPastData((prevData) => prevData.filter((todo) => todo.id !== id));
       setFutureData((prevData) => prevData.filter((todo) => todo.id !== id));
       setMainData((prevData) =>
@@ -209,12 +304,16 @@ function useTodos() {
 
       const updatedTodo =
         pastData.find((todo) => todo.id === id) ||
-        mainData.find((todo) => todo.id === id);
+        mainData.find((todo) => todo.id === id) ||
+        done.find((todo) => todo.id === id) ||
+        backlog.find((todo) => todo.id === id);
 
       if (!updatedTodo) {
         throw new Error("Todo item not found");
       }
 
+      setBacklog((prevData) => prevData.filter((todo) => todo.id !== id));
+      setDone((prevData) => prevData.filter((todo) => todo.id !== id));
       setPastData((prevData) => prevData.filter((todo) => todo.id !== id));
       setMainData((prevData) => prevData.filter((todo) => todo.id !== id));
       setFutureData((prevData) =>
@@ -227,17 +326,52 @@ function useTodos() {
     }
   }
 
+  async function handleToDone(id: number) {
+    try {
+      const maxOrder =
+        done.length > 0 ? Math.max(...done.map((todo) => todo.order)) : 0;
+
+      await updateTodoToPast(id, maxOrder + 1);
+
+      const updatedTodo =
+        backlog.find((todo) => todo.id === id) ||
+        pastData.find((todo) => todo.id === id) ||
+        mainData.find((todo) => todo.id === id) ||
+        futureData.find((todo) => todo.id === id);
+
+      if (!updatedTodo) {
+        throw new Error("Todo item not found");
+      }
+
+      setBacklog((prevData) => prevData.filter((todo) => todo.id !== id));
+      setPastData((prevData) => prevData.filter((todo) => todo.id !== id));
+      setMainData((prevData) => prevData.filter((todo) => todo.id !== id));
+      setFutureData((prevData) => prevData.filter((todo) => todo.id !== id));
+      setDone((prevData) =>
+        [...prevData, { ...updatedTodo, order: maxOrder + 1 }].sort(
+          (a, b) => a.order - b.order
+        )
+      );
+    } catch (error) {
+      console.error("Failed to move todo", error);
+    }
+  }
+
   return {
     isLoading,
+    backlog,
+    done,
     pastData,
     mainData,
     futureData,
     handleAddTodo,
     handleDeleteTodo,
     handleEditTodo,
+    handleToBacklog,
     handleToPast,
     handleToPresent,
     handleToFuture,
+    handleToDone,
     confirmDelete,
     todoToEdit,
     todoToDelete,

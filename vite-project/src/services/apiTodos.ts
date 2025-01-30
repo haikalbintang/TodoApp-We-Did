@@ -1,6 +1,27 @@
 import { CreateItem, GetItem } from "../types";
 import supabase from "./supabase";
 
+export async function getBacklogTodos() {
+  const userId = localStorage.getItem("userId");
+
+  if (!userId) {
+    throw new Error("User ID not found");
+  }
+
+  const { data, error } = await supabase
+    .from("todos")
+    .select("*")
+    .eq("user_id", userId)
+    .eq("time", 0);
+
+  if (error) {
+    console.error(error);
+    throw new Error("Backlog todo items could not be loaded");
+  }
+
+  return data;
+}
+
 export async function getPastTodos() {
   const userId = localStorage.getItem("userId");
 
@@ -55,6 +76,27 @@ export async function getFutureTodos() {
     .select("*")
     .eq("user_id", userId)
     .eq("time", 3);
+
+  if (error) {
+    console.error(error);
+    throw new Error("Future todo items could not be loaded");
+  }
+
+  return data;
+}
+
+export async function getDoneTodos() {
+  const userId = localStorage.getItem("userId");
+
+  if (!userId) {
+    throw new Error("User ID not found");
+  }
+
+  const { data, error } = await supabase
+    .from("todos")
+    .select("*")
+    .eq("user_id", userId)
+    .eq("time", 4);
 
   if (error) {
     console.error(error);

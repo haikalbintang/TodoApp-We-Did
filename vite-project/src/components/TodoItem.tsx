@@ -17,6 +17,8 @@ interface TodoItemProps {
   onPastClick: (id: number) => Promise<void>;
   onPresentClick: (id: number) => Promise<void>;
   onFutureClick: (id: number) => Promise<void>;
+  onBacklogClick: (id: number) => Promise<void>;
+  onDoneClick: (id: number) => Promise<void>;
 }
 
 export default function TodoItem({
@@ -28,8 +30,15 @@ export default function TodoItem({
   onPastClick,
   onPresentClick,
   onFutureClick,
+  onBacklogClick,
+  onDoneClick,
 }: TodoItemProps) {
   const [descIsShown, setDescIsShown] = useState(false);
+
+  function handleToBacklog(e: React.MouseEvent<HTMLButtonElement>) {
+    e.stopPropagation();
+    onBacklogClick(data.id);
+  }
 
   function handleToPast(e: React.MouseEvent<HTMLButtonElement>) {
     e.stopPropagation();
@@ -46,6 +55,11 @@ export default function TodoItem({
     onFutureClick(data.id);
   }
 
+  function handleToDone(e: React.MouseEvent<HTMLButtonElement>) {
+    e.stopPropagation();
+    onDoneClick(data.id);
+  }
+
   return (
     <TodoItemWrapper
       index={index}
@@ -54,12 +68,17 @@ export default function TodoItem({
       data={data}
     >
       <div
-        className="flex justify-between"
+        className="flex justify-between hover:cursor-pointer group"
         onClick={() => setDescIsShown((prev) => !prev)}
       >
         <DisplayTodoItem data={data} />
 
-        <div className="flex gap-2 items-start mt-1">
+        <div className="hidden gap-1 items-start mt-1 group-hover:flex z-20">
+          <TimelineButton
+            type="button"
+            color="gray"
+            onClick={handleToBacklog}
+          />
           <TimelineButton
             type="button"
             color="emerald"
@@ -71,6 +90,7 @@ export default function TodoItem({
             color="orange"
             onClick={handleToFuture}
           />
+          <TimelineButton type="button" color="red" onClick={handleToDone} />
         </div>
       </div>
       {descIsShown && (

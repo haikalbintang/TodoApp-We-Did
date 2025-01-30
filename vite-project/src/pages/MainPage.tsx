@@ -18,17 +18,22 @@ import { userLogout } from "../services/apiUsers";
 function MainPage() {
   const {
     isLoading,
+    backlog,
+    done,
     pastData,
     mainData,
     futureData,
     handleAddTodo,
     handleDeleteTodo,
     handleEditTodo,
+    handleToBacklog,
     handleToPast,
     handleToPresent,
     handleToFuture,
+    handleToDone,
     confirmDelete,
     todoToEdit,
+    todoToDelete,
     setTodoToEdit,
   } = useTodos();
   const [profile, setProfile] = useState<Profile>({
@@ -109,7 +114,7 @@ function MainPage() {
 
   return (
     <>
-      <div className="relative min-h-screen no-sx">
+      <div className="relative h-screen no-sx">
         <Navbar
           selectedNavLink={selectedNavLink}
           setSelectedNavLink={setSelectedNavLink}
@@ -188,10 +193,27 @@ function MainPage() {
             </h2>
           </main>
         ) : null}
-        <div className="mx-auto max-w-[1366px] px-4 pb-24">
+        <div className="mx-auto w-screen h-screen overflow-x-auto px-4 pb-24">
           <Main>
             <List
               key={0}
+              title={"Backlogs"}
+              onClick={() => setSelectedNavLink("backlog")}
+              data={backlog}
+              bgColor="bg-gray-300"
+              selectedBgColor="bg-gray-200"
+              onDeleteTodo={handleDelete}
+              onEditTodo={handleEdit}
+              onPastClick={handleToPast}
+              onPresentClick={handleToPresent}
+              onFutureClick={handleToFuture}
+              onBacklogClick={handleToBacklog}
+              onDoneClick={handleToDone}
+              isLoading={isLoading}
+            />
+
+            <List
+              key={1}
               title={"Daily Habits"}
               onClick={() => setSelectedNavLink("daily")}
               data={pastData}
@@ -202,12 +224,14 @@ function MainPage() {
               onPastClick={handleToPast}
               onPresentClick={handleToPresent}
               onFutureClick={handleToFuture}
+              onBacklogClick={handleToBacklog}
+              onDoneClick={handleToDone}
               isLoading={isLoading}
             />
 
             <>
               <List
-                key={1}
+                key={2}
                 title={"Today"}
                 onClick={() => setSelectedNavLink("today")}
                 data={mainData}
@@ -218,12 +242,14 @@ function MainPage() {
                 onPastClick={handleToPast}
                 onPresentClick={handleToPresent}
                 onFutureClick={handleToFuture}
+                onBacklogClick={handleToBacklog}
+                onDoneClick={handleToDone}
                 isLoading={isLoading}
               />
             </>
 
             <List
-              key={2}
+              key={3}
               title={"Todo List"}
               onClick={() => setSelectedNavLink("later")}
               data={futureData}
@@ -234,6 +260,25 @@ function MainPage() {
               onPastClick={handleToPast}
               onPresentClick={handleToPresent}
               onFutureClick={handleToFuture}
+              onBacklogClick={handleToBacklog}
+              onDoneClick={handleToDone}
+              isLoading={isLoading}
+            />
+
+            <List
+              key={4}
+              title={"Done"}
+              onClick={() => setSelectedNavLink("done")}
+              data={done}
+              bgColor="bg-red-400"
+              selectedBgColor="bg-red-300"
+              onDeleteTodo={handleDelete}
+              onEditTodo={handleEdit}
+              onPastClick={handleToPast}
+              onPresentClick={handleToPresent}
+              onFutureClick={handleToFuture}
+              onBacklogClick={handleToBacklog}
+              onDoneClick={handleToDone}
               isLoading={isLoading}
             />
           </Main>
@@ -243,6 +288,16 @@ function MainPage() {
             className="fixed cursor-pointer animate-bounce bg-teal-500 p-5 rounded-full right-5 bottom-6 shadow-zinc-600 shadow-lg"
           >
             <FaFeather className="text-4xl" />
+          </div>
+
+          <div className="m-6">
+            <p>not {profile.username}?</p>
+            <p
+              onClick={handleLogout}
+              className="cursor-pointer text-fuchsia-600 underline"
+            >
+              Logout
+            </p>
           </div>
         </div>
 
@@ -259,16 +314,6 @@ function MainPage() {
             onDelete={handleConfirmDelete}
           />
         )}
-      </div>
-
-      <div className="m-6">
-        <p>not {profile.username}?</p>
-        <p
-          onClick={handleLogout}
-          className="cursor-pointer text-fuchsia-600 underline"
-        >
-          Logout
-        </p>
       </div>
     </>
   );

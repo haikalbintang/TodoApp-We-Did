@@ -18,12 +18,16 @@ interface AddItemFormProps {
 
 const getColorByTime = (time: number): string => {
   switch (time) {
+    case 0:
+      return "gray";
     case 1:
       return "emerald";
     case 2:
       return "sky";
     case 3:
       return "orange";
+    case 4:
+      return "red";
     default:
       return "sky"; // Default color if no match
   }
@@ -124,7 +128,7 @@ const AddItemForm = ({ onClose, onSubmit, initialData }: AddItemFormProps) => {
                 }))
               }
             />
-            <div className="flex gap-2 pb-3 xl:pb-0">
+            <div className="flex flex-wrap pb-3 xl:pb-0">
               <div className="w-1/3 flex items-center justify-center">
                 <TimelineButton
                   color="emerald"
@@ -150,6 +154,24 @@ const AddItemForm = ({ onClose, onSubmit, initialData }: AddItemFormProps) => {
                   onClick={() => handleTimeSelection("orange", 3)}
                 >
                   <span className="pl-1">later</span>
+                </TimelineButton>
+              </div>
+              <div className="w-1/2 flex items-center justify-center">
+                <TimelineButton
+                  color="gray"
+                  type="button"
+                  onClick={() => handleTimeSelection("gray", 0)}
+                >
+                  <span className="pl-1">backlog</span>
+                </TimelineButton>
+              </div>
+              <div className="w-1/2 flex items-center justify-center">
+                <TimelineButton
+                  color="red"
+                  type="button"
+                  onClick={() => handleTimeSelection("red", 4)}
+                >
+                  <span className="pl-1">done</span>
                 </TimelineButton>
               </div>
             </div>

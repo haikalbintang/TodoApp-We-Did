@@ -14,6 +14,8 @@ export interface ListProps {
   onPastClick: (id: number) => Promise<void>;
   onPresentClick: (id: number) => Promise<void>;
   onFutureClick: (id: number) => Promise<void>;
+  onBacklogClick: (id: number) => Promise<void>;
+  onDoneClick: (id: number) => Promise<void>;
 }
 
 const List = ({
@@ -28,6 +30,8 @@ const List = ({
   onPastClick,
   onPresentClick,
   onFutureClick,
+  onBacklogClick,
+  onDoneClick,
 }: ListProps) => {
   return (
     <Paper onClick={onClick} title={title} bgColor={bgColor}>
@@ -47,6 +51,8 @@ const List = ({
             onPastClick={onPastClick}
             onPresentClick={onPresentClick}
             onFutureClick={onFutureClick}
+            onBacklogClick={onBacklogClick}
+            onDoneClick={onDoneClick}
           />
         ))
       ) : (
