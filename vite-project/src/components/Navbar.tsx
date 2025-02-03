@@ -1,7 +1,5 @@
-import { useEffect, useState } from "react";
 import { userLogout } from "../services/apiUsers";
 import { useNavigate } from "react-router-dom";
-import supabase from "../services/supabase";
 import Logo from "./Logo";
 
 interface NavbarProps {
@@ -15,20 +13,7 @@ export default function Navbar({
   setSelectedNavLink,
   onHelpClick,
 }: NavbarProps) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchSession = async () => {
-      const { data, error } = await supabase.auth.getSession();
-      if (error) {
-        console.error("Error fetching session:", error);
-      } else {
-        setIsAuthenticated(!!data.session);
-      }
-    };
-    fetchSession();
-  }, []);
 
   function handleLogout() {
     userLogout();
@@ -53,14 +38,12 @@ export default function Navbar({
             >
               Help
             </p>
-            {isAuthenticated && (
-              <button
-                onClick={handleLogout}
-                className="bg-fuchsia-900 text-fuchsia-200 py-2 px-4 text-base rounded-full"
-              >
-                Logout
-              </button>
-            )}
+            <button
+              onClick={handleLogout}
+              className="bg-fuchsia-900 text-fuchsia-200 py-2 px-4 text-base rounded-full"
+            >
+              Logout
+            </button>
           </div>
         </div>
       </nav>
