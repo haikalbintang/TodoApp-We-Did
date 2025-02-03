@@ -19,6 +19,7 @@ interface TodoItemProps {
   onFutureClick: (id: number) => Promise<void>;
   onBacklogClick: (id: number) => Promise<void>;
   onDoneClick: (id: number) => Promise<void>;
+  list: "backlog" | "daily" | "today" | "later" | "done";
 }
 
 export default function TodoItem({
@@ -32,6 +33,7 @@ export default function TodoItem({
   onFutureClick,
   onBacklogClick,
   onDoneClick,
+  list,
 }: TodoItemProps) {
   const [descIsShown, setDescIsShown] = useState(false);
 
@@ -74,23 +76,37 @@ export default function TodoItem({
         <DisplayTodoItem data={data} />
 
         <div className="hidden gap-1 items-start mt-1 group-hover:flex z-20">
-          <TimelineButton
-            type="button"
-            color="gray"
-            onClick={handleToBacklog}
-          />
-          <TimelineButton
-            type="button"
-            color="emerald"
-            onClick={handleToPast}
-          />
-          <TimelineButton type="button" color="sky" onClick={handleToPresent} />
-          <TimelineButton
-            type="button"
-            color="orange"
-            onClick={handleToFuture}
-          />
-          <TimelineButton type="button" color="red" onClick={handleToDone} />
+          {list != "backlog" && (
+            <TimelineButton
+              type="button"
+              color="gray"
+              onClick={handleToBacklog}
+            />
+          )}
+          {list != "daily" && (
+            <TimelineButton
+              type="button"
+              color="emerald"
+              onClick={handleToPast}
+            />
+          )}
+          {list != "today" && (
+            <TimelineButton
+              type="button"
+              color="sky"
+              onClick={handleToPresent}
+            />
+          )}
+          {list != "later" && (
+            <TimelineButton
+              type="button"
+              color="orange"
+              onClick={handleToFuture}
+            />
+          )}
+          {list != "done" && (
+            <TimelineButton type="button" color="red" onClick={handleToDone} />
+          )}
         </div>
       </div>
       {descIsShown && (

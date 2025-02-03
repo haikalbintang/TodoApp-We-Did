@@ -8,6 +8,8 @@ import {
   getPastTodos,
   getPresentTodos,
   updateTodo,
+  updateTodoToBacklog,
+  updateTodoToDone,
   updateTodoToFuture,
   updateTodoToPast,
   updateTodoToPresent,
@@ -201,7 +203,7 @@ function useTodos() {
       const maxOrder =
         backlog.length > 0 ? Math.max(...backlog.map((todo) => todo.order)) : 0;
 
-      await updateTodoToPast(id, maxOrder + 1);
+      await updateTodoToBacklog(id, maxOrder + 1);
 
       const updatedTodo =
         pastData.find((todo) => todo.id === id) ||
@@ -331,7 +333,7 @@ function useTodos() {
       const maxOrder =
         done.length > 0 ? Math.max(...done.map((todo) => todo.order)) : 0;
 
-      await updateTodoToPast(id, maxOrder + 1);
+      await updateTodoToDone(id, maxOrder + 1);
 
       const updatedTodo =
         backlog.find((todo) => todo.id === id) ||

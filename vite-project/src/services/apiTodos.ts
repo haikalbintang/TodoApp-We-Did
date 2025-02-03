@@ -128,6 +128,24 @@ export async function updateTodo(
   return data[0];
 }
 
+export async function updateTodoToBacklog(
+  id: number,
+  order: number
+): Promise<GetItem> {
+  const { data, error } = await supabase
+    .from("todos")
+    .update({ time: 0, order: order })
+    .eq("id", id)
+    .select();
+
+  if (error) {
+    console.error(error);
+    throw new Error("Todo item could not be updated");
+  }
+
+  return data[0];
+}
+
 export async function updateTodoToPast(
   id: number,
   order: number
@@ -182,16 +200,20 @@ export async function updateTodoToFuture(
   return data[0];
 }
 
-// export async function updateItemPosition(id: number, newStatus: string) {
-//   try {
-//     if (newStatus === "past") {
-//       await updateTodoToPast(id);
-//     } else if (newStatus === "present") {
-//       await updateTodoToPresent(id);
-//     } else if (newStatus === "future") {
-//       await updateTodoToFuture(id);
-//     }
-//   } catch (error) {
-//     console.error("Failed to update item position:", error);
-//   }
-// }
+export async function updateTodoToDone(
+  id: number,
+  order: number
+): Promise<GetItem> {
+  const { data, error } = await supabase
+    .from("todos")
+    .update({ time: 4, order: order })
+    .eq("id", id)
+    .select();
+
+  if (error) {
+    console.error(error);
+    throw new Error("Todo item could not be updated");
+  }
+
+  return data[0];
+}

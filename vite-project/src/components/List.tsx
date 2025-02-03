@@ -16,6 +16,8 @@ export interface ListProps {
   onFutureClick: (id: number) => Promise<void>;
   onBacklogClick: (id: number) => Promise<void>;
   onDoneClick: (id: number) => Promise<void>;
+  list: "backlog" | "daily" | "today" | "later" | "done";
+  activeNavLink: string;
 }
 
 const List = ({
@@ -32,9 +34,17 @@ const List = ({
   onFutureClick,
   onBacklogClick,
   onDoneClick,
+  list,
+  activeNavLink,
 }: ListProps) => {
   return (
-    <Paper onClick={onClick} title={title} bgColor={bgColor}>
+    <Paper
+      onClick={onClick}
+      title={title}
+      bgColor={bgColor}
+      activeNavLink={activeNavLink}
+      list={list}
+    >
       {isLoading ? (
         <div className="flex justify-center items-center h-full pt-4 pb-2">
           <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-zinc-800"></div>
@@ -53,6 +63,7 @@ const List = ({
             onFutureClick={onFutureClick}
             onBacklogClick={onBacklogClick}
             onDoneClick={onDoneClick}
+            list={list}
           />
         ))
       ) : (

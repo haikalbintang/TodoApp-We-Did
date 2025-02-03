@@ -9,9 +9,8 @@ import Form from "../components/AddItemForm";
 import DeleteModal from "../components/DeleteModal";
 
 import { FaFeather } from "react-icons/fa6";
-import { GetItem, Profile } from "../types";
-import supabase from "../services/supabase";
-import TimelineButton from "../components/TimelineButton";
+import { GetItem } from "../types";
+import WelcomeMessage from "../components/WelcomeMessage";
 
 function MainPage() {
   const {
@@ -34,17 +33,17 @@ function MainPage() {
     // todoToDelete,
     setTodoToEdit,
   } = useTodos();
-  const [profile, setProfile] = useState<Profile>({
-    nickname: "",
-    username: "",
-  });
-  const [selectedNavLink, setSelectedNavLink] = useState("home");
+  const [showWelcomeMessage, setShowWelcomeMessage] = useState(false);
+  const [selectedNavLink, setSelectedNavLink] = useState("today");
   const [formIsShown, setFormIsShown] = useState(false);
   const [deleteIsShown, setDeleteIsShown] = useState(false);
-  const [profileIsLoading, setProfileIsLoading] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
+  const backlogRef = useRef<HTMLDivElement>(null);
+  const dailyRef = useRef<HTMLDivElement>(null);
   const todayRef = useRef<HTMLDivElement>(null);
+  const laterRef = useRef<HTMLDivElement>(null);
+  const doneRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (containerRef.current && todayRef.current) {
@@ -59,40 +58,19 @@ function MainPage() {
     }
   }, []);
 
-  useEffect(() => {
-    async function loadProfile() {
-      setProfileIsLoading(true);
-      await fetchProfile();
-      setProfileIsLoading(false);
-    }
+  const handleNavClick = (navLink: string) => {
+    setSelectedNavLink(navLink);
 
-    loadProfile();
-  }, []);
-
-  const fetchProfile = async () => {
-    const {
-      data: { user },
-      error: userError,
-    } = await supabase.auth.getUser();
-
-    if (user) {
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("nickname, username")
-        .eq("id", user.id)
-        .single();
-
-      if (error) {
-        console.error("Error fetching profile:", error.message);
-      } else if (data) {
-        setProfile((prev) => ({
-          ...prev,
-          nickname: data.nickname,
-          username: data.username,
-        }));
-      }
-    } else if (userError) {
-      console.error("Error fetching user:", userError.message);
+    if (navLink === "backlog" && backlogRef.current) {
+      backlogRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else if (navLink === "daily" && dailyRef.current) {
+      dailyRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else if (navLink === "today" && todayRef.current) {
+      todayRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else if (navLink === "later" && laterRef.current) {
+      laterRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else if (navLink === "done" && doneRef.current) {
+      doneRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
 
@@ -120,78 +98,32 @@ function MainPage() {
     setDeleteIsShown(false);
   }
 
+  const handleHelpClick = () => {
+    setShowWelcomeMessage(true);
+  };
+
   return (
-    <>
-      <div className="relative h-screen">
+    <div className="h-screen">
+      <div className="">
         <Navbar
           selectedNavLink={selectedNavLink}
-          setSelectedNavLink={setSelectedNavLink}
-        ></Navbar>
-        {selectedNavLink === "home" && profileIsLoading ? (
-          <div className="flex justify-center items-center h-full pt-72 pb-2">
-            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-zinc-800"></div>
-          </div>
-        ) : selectedNavLink === "home" ? (
-          <main className="p-10 mx-auto max-w-[1366px] px-4">
-            <h1 className="font-bold text-wrap text-5xl mt-4 mb-10">
-              <span className="text-teal-600">Welcome</span>
-              <span className="text-zinc-800">, {profile.nickname}!</span>
-            </h1>
-            <h2 className="mb-2 text-zinc-800">
-              This App's main purpose is to organize your tasks or activities
-              into <span className="font-bold">three</span> different lists:
-            </h2>
-            <div className="flex flex-col gap-1 my-3 px-2">
-              <div
-                onClick={() => setSelectedNavLink("daily")}
-                className="flex items-center gap-2"
-              >
-                <TimelineButton type="button" color="emerald" />
-                <p className="font-bold pb-1 tracking-wider text-lg text-zinc-700">
-                  daily
-                </p>
-              </div>
+          setSelectedNavLink={handleNavClick}
+          onHelpClick={handleHelpClick}
+        />
 
-              <div
-                onClick={() => setSelectedNavLink("today")}
-                className="flex items-center gap-2"
-              >
-                <TimelineButton type="button" color="sky" />
-                <p className="font-bold pb-1 tracking-wider text-lg text-zinc-700">
-                  today
-                </p>
-              </div>
+        {showWelcomeMessage && (
+          <WelcomeMessage
+            showWelcomeMessage={showWelcomeMessage}
+            setShowWelcomeMessage={setShowWelcomeMessage}
+          />
+        )}
 
-              <div
-                onClick={() => setSelectedNavLink("later")}
-                className="flex items-center gap-2"
-              >
-                <TimelineButton type="button" color="orange" />
-                <p className="font-bold pb-1 tracking-wider text-lg text-zinc-700">
-                  later
-                </p>
-              </div>
-            </div>
-
-            <h2 className="text-zinc-800 mb-2">
-              To add a new task, click the feather button. You can edit and
-              delete any task by clicking the icons.
-            </h2>
-            <h2 className="text-zinc-800 mb-6">
-              You can move tasks between lists by clicking the right-colored
-              bullet.
-            </h2>
-            <h2 className="text-zinc-800 text-lg font-bold">
-              {">"} Got it, let's go!
-            </h2>
-          </main>
-        ) : null}
         <div
           ref={containerRef}
-          className="mx-auto w-screen h-screen overflow-x-auto px-4 pb-24"
+          className="mx-auto overflow-x-scroll px-4 pb-24 pt-6"
         >
           <Main>
-            <div>
+            <div ref={backlogRef}>
               <List
                 key={0}
                 title={"Backlogs"}
@@ -207,10 +139,12 @@ function MainPage() {
                 onBacklogClick={handleToBacklog}
                 onDoneClick={handleToDone}
                 isLoading={isLoading}
+                list="backlog"
+                activeNavLink={selectedNavLink}
               />
             </div>
 
-            <div>
+            <div ref={dailyRef}>
               <List
                 key={1}
                 title={"Daily Habits"}
@@ -226,6 +160,8 @@ function MainPage() {
                 onBacklogClick={handleToBacklog}
                 onDoneClick={handleToDone}
                 isLoading={isLoading}
+                list="daily"
+                activeNavLink={selectedNavLink}
               />
             </div>
 
@@ -245,10 +181,12 @@ function MainPage() {
                 onBacklogClick={handleToBacklog}
                 onDoneClick={handleToDone}
                 isLoading={isLoading}
+                list="today"
+                activeNavLink={selectedNavLink}
               />
             </div>
 
-            <div>
+            <div ref={laterRef}>
               <List
                 key={3}
                 title={"Todo List"}
@@ -264,10 +202,12 @@ function MainPage() {
                 onBacklogClick={handleToBacklog}
                 onDoneClick={handleToDone}
                 isLoading={isLoading}
+                list="later"
+                activeNavLink={selectedNavLink}
               />
             </div>
 
-            <div>
+            <div ref={doneRef}>
               <List
                 key={4}
                 title={"Done"}
@@ -283,19 +223,17 @@ function MainPage() {
                 onBacklogClick={handleToBacklog}
                 onDoneClick={handleToDone}
                 isLoading={isLoading}
+                list="done"
+                activeNavLink={selectedNavLink}
               />
             </div>
           </Main>
 
           <div
             onClick={handleAddItemForm}
-            className="fixed cursor-pointer animate-bounce bg-teal-500 p-5 rounded-full right-5 bottom-6 shadow-zinc-600 shadow-lg"
+            className="fixed cursor-pointer animate-bounce bg-fuchsia-950 p-5 rounded-full right-5 bottom-6 shadow-zinc-600 shadow-lg"
           >
-            <FaFeather className="text-4xl" />
-          </div>
-
-          <div className="m-6">
-            <p>not {profile.username}?</p>
+            <FaFeather className="text-4xl text-fuchsia-300" />
           </div>
         </div>
 
@@ -313,7 +251,7 @@ function MainPage() {
           />
         )}
       </div>
-    </>
+    </div>
   );
 }
 

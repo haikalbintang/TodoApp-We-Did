@@ -6,11 +6,25 @@ interface PaperProps {
   title: string;
   children: ReactNode;
   bgColor: string;
+  activeNavLink: string;
+  list: string;
 }
 
-const Paper = ({ onClick, title, children, bgColor }: PaperProps) => {
+const Paper = ({
+  onClick,
+  title,
+  children,
+  bgColor,
+  activeNavLink,
+  list,
+}: PaperProps) => {
   return (
-    <div className={`w-[400px] ${bgColor} p-4 rounded-2xl`} onClick={onClick}>
+    <div
+      className={`${
+        activeNavLink === list ? "w-96" : "w-64 opacity-70"
+      } ${bgColor} p-4 rounded-2xl`}
+      onClick={onClick}
+    >
       <Header2 title={title} />
       <ol>{children}</ol>
     </div>
@@ -18,13 +32,3 @@ const Paper = ({ onClick, title, children, bgColor }: PaperProps) => {
 };
 
 export default Paper;
-
-// {selectedNavLink === "present" ? (
-//     <Paper onClick={() => setSelectedNavLink("present")} title={"Main"}>
-//       <ol>
-//         {mainDataSeed.map((data, index) => (
-//           <TodoItem key={data.title} data={data} index={index} />
-//         ))}
-//       </ol>
-//     </Paper>
-//   ) : null}
