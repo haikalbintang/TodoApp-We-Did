@@ -8,7 +8,6 @@ interface NavbarProps {
   children?: ReactNode;
   selectedNavLink: string;
   setSelectedNavLink: (navLink: string) => void;
-  onClickWelcome: () => void;
 }
 
 export default function Navbar({
