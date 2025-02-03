@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import useTodos from "../hooks/useTodos";
 
@@ -10,10 +10,8 @@ import DeleteModal from "../components/DeleteModal";
 
 import { FaFeather } from "react-icons/fa6";
 import { GetItem, Profile } from "../types";
-import { useNavigate } from "react-router-dom";
 import supabase from "../services/supabase";
 import TimelineButton from "../components/TimelineButton";
-import { userLogout } from "../services/apiUsers";
 
 function MainPage() {
   const {
@@ -33,7 +31,7 @@ function MainPage() {
     handleToDone,
     confirmDelete,
     todoToEdit,
-    todoToDelete,
+    // todoToDelete,
     setTodoToEdit,
   } = useTodos();
   const [profile, setProfile] = useState<Profile>({
@@ -44,7 +42,22 @@ function MainPage() {
   const [formIsShown, setFormIsShown] = useState(false);
   const [deleteIsShown, setDeleteIsShown] = useState(false);
   const [profileIsLoading, setProfileIsLoading] = useState(false);
-  const navigate = useNavigate();
+
+  const containerRef = useRef<HTMLDivElement>(null);
+  const todayRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (containerRef.current && todayRef.current) {
+      const container = containerRef.current;
+      const todayElement = todayRef.current;
+
+      const scrollLeft =
+        todayElement.offsetLeft -
+        container.offsetWidth / 2 +
+        todayElement.offsetWidth / 2;
+      container.scrollTo({ left: scrollLeft, behavior: "smooth" });
+    }
+  }, []);
 
   useEffect(() => {
     async function loadProfile() {
@@ -107,33 +120,13 @@ function MainPage() {
     setDeleteIsShown(false);
   }
 
-  function handleLogout() {
-    userLogout();
-    navigate("/");
-  }
-
   return (
     <>
-      <div className="relative h-screen no-sx">
+      <div className="relative h-screen">
         <Navbar
           selectedNavLink={selectedNavLink}
           setSelectedNavLink={setSelectedNavLink}
-          onClickWelcome={() => setSelectedNavLink("home")}
-          // onClickLogin={() => setLoginIsShown(true)}
-        >
-          <button
-            // onClick={() => setSignUpIsShown(true)}
-            className="hidden bg-fuchsia-900 text-fuchsia-200 py-2 px-6 text-lg rounded-full"
-          >
-            Sign Up
-          </button>
-          <button
-            // onClick={() => setLoginIsShown(true)}
-            className="hidden bg-fuchsia-900 text-fuchsia-200 py-2 px-6 text-lg rounded-full mx-5"
-          >
-            Login
-          </button>
-        </Navbar>
+        ></Navbar>
         {selectedNavLink === "home" && profileIsLoading ? (
           <div className="flex justify-center items-center h-full pt-72 pb-2">
             <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-zinc-800"></div>
@@ -193,43 +186,50 @@ function MainPage() {
             </h2>
           </main>
         ) : null}
-        <div className="mx-auto w-screen h-screen overflow-x-auto px-4 pb-24">
+        <div
+          ref={containerRef}
+          className="mx-auto w-screen h-screen overflow-x-auto px-4 pb-24"
+        >
           <Main>
-            <List
-              key={0}
-              title={"Backlogs"}
-              onClick={() => setSelectedNavLink("backlog")}
-              data={backlog}
-              bgColor="bg-gray-300"
-              selectedBgColor="bg-gray-200"
-              onDeleteTodo={handleDelete}
-              onEditTodo={handleEdit}
-              onPastClick={handleToPast}
-              onPresentClick={handleToPresent}
-              onFutureClick={handleToFuture}
-              onBacklogClick={handleToBacklog}
-              onDoneClick={handleToDone}
-              isLoading={isLoading}
-            />
+            <div>
+              <List
+                key={0}
+                title={"Backlogs"}
+                onClick={() => setSelectedNavLink("backlog")}
+                data={backlog}
+                bgColor="bg-gray-300"
+                selectedBgColor="bg-gray-200"
+                onDeleteTodo={handleDelete}
+                onEditTodo={handleEdit}
+                onPastClick={handleToPast}
+                onPresentClick={handleToPresent}
+                onFutureClick={handleToFuture}
+                onBacklogClick={handleToBacklog}
+                onDoneClick={handleToDone}
+                isLoading={isLoading}
+              />
+            </div>
 
-            <List
-              key={1}
-              title={"Daily Habits"}
-              onClick={() => setSelectedNavLink("daily")}
-              data={pastData}
-              bgColor="bg-emerald-300"
-              selectedBgColor="bg-emerald-200"
-              onDeleteTodo={handleDelete}
-              onEditTodo={handleEdit}
-              onPastClick={handleToPast}
-              onPresentClick={handleToPresent}
-              onFutureClick={handleToFuture}
-              onBacklogClick={handleToBacklog}
-              onDoneClick={handleToDone}
-              isLoading={isLoading}
-            />
+            <div>
+              <List
+                key={1}
+                title={"Daily Habits"}
+                onClick={() => setSelectedNavLink("daily")}
+                data={pastData}
+                bgColor="bg-emerald-300"
+                selectedBgColor="bg-emerald-200"
+                onDeleteTodo={handleDelete}
+                onEditTodo={handleEdit}
+                onPastClick={handleToPast}
+                onPresentClick={handleToPresent}
+                onFutureClick={handleToFuture}
+                onBacklogClick={handleToBacklog}
+                onDoneClick={handleToDone}
+                isLoading={isLoading}
+              />
+            </div>
 
-            <>
+            <div ref={todayRef}>
               <List
                 key={2}
                 title={"Today"}
@@ -246,41 +246,45 @@ function MainPage() {
                 onDoneClick={handleToDone}
                 isLoading={isLoading}
               />
-            </>
+            </div>
 
-            <List
-              key={3}
-              title={"Todo List"}
-              onClick={() => setSelectedNavLink("later")}
-              data={futureData}
-              bgColor="bg-orange-300"
-              selectedBgColor="bg-orange-200"
-              onDeleteTodo={handleDelete}
-              onEditTodo={handleEdit}
-              onPastClick={handleToPast}
-              onPresentClick={handleToPresent}
-              onFutureClick={handleToFuture}
-              onBacklogClick={handleToBacklog}
-              onDoneClick={handleToDone}
-              isLoading={isLoading}
-            />
+            <div>
+              <List
+                key={3}
+                title={"Todo List"}
+                onClick={() => setSelectedNavLink("later")}
+                data={futureData}
+                bgColor="bg-orange-300"
+                selectedBgColor="bg-orange-200"
+                onDeleteTodo={handleDelete}
+                onEditTodo={handleEdit}
+                onPastClick={handleToPast}
+                onPresentClick={handleToPresent}
+                onFutureClick={handleToFuture}
+                onBacklogClick={handleToBacklog}
+                onDoneClick={handleToDone}
+                isLoading={isLoading}
+              />
+            </div>
 
-            <List
-              key={4}
-              title={"Done"}
-              onClick={() => setSelectedNavLink("done")}
-              data={done}
-              bgColor="bg-red-400"
-              selectedBgColor="bg-red-300"
-              onDeleteTodo={handleDelete}
-              onEditTodo={handleEdit}
-              onPastClick={handleToPast}
-              onPresentClick={handleToPresent}
-              onFutureClick={handleToFuture}
-              onBacklogClick={handleToBacklog}
-              onDoneClick={handleToDone}
-              isLoading={isLoading}
-            />
+            <div>
+              <List
+                key={4}
+                title={"Done"}
+                onClick={() => setSelectedNavLink("done")}
+                data={done}
+                bgColor="bg-red-400"
+                selectedBgColor="bg-red-300"
+                onDeleteTodo={handleDelete}
+                onEditTodo={handleEdit}
+                onPastClick={handleToPast}
+                onPresentClick={handleToPresent}
+                onFutureClick={handleToFuture}
+                onBacklogClick={handleToBacklog}
+                onDoneClick={handleToDone}
+                isLoading={isLoading}
+              />
+            </div>
           </Main>
 
           <div
@@ -292,12 +296,6 @@ function MainPage() {
 
           <div className="m-6">
             <p>not {profile.username}?</p>
-            <p
-              onClick={handleLogout}
-              className="cursor-pointer text-fuchsia-600 underline"
-            >
-              Logout
-            </p>
           </div>
         </div>
 
